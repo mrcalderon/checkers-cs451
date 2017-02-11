@@ -1,6 +1,6 @@
-window.onload = function() {    
+window.onload = function() {
   //The initial setup
-  var gameBoard = [ 
+  var gameBoard = [
     [  0,  1,  0,  1,  0,  1,  0,  1 ],
     [  1,  0,  1,  0,  1,  0,  1,  0 ],
     [  0,  1,  0,  1,  0,  1,  0,  1 ],
@@ -12,8 +12,8 @@ window.onload = function() {
   ];
   //arrays to store the instances
   var pieces = [];
-  var tiles = []; 
-  
+  var tiles = [];
+
   //distance formula
   var dist = function (x1, y1, x2, y2) {
     return Math.sqrt(Math.pow((x1-x2),2)+Math.pow((y1-y2),2));
@@ -23,7 +23,7 @@ window.onload = function() {
     //linked DOM element
     this.element = element;
     //positions on gameBoard array in format row, column
-    this.position = position; 
+    this.position = position;
     //which player's piece i it
     this.player = '';
     //figure out player by piece id
@@ -34,12 +34,12 @@ window.onload = function() {
     //makes object a king
     this.king = false;
     this.makeKing = function () {
-      this.element.css("backgroundImage", "url('king"+this.player+".png')");
+      this.element.css("backgroundImage", "url('images/king"+this.player+".png')");
       this.king = true;
     }
     //moves the piece
-    this.move = function (tile) { 
-      this.element.removeClass('selected'); 
+    this.move = function (tile) {
+      this.element.removeClass('selected');
       if(!Board.isValidPlacetoMove(tile.position[0], tile.position[1])) return false;
       //make sure piece doesn't go backwards if it's not a king
       if(this.player == 1 && this.king == false) {
@@ -55,12 +55,12 @@ window.onload = function() {
       this.element.css('top', Board.dictionary[this.position[0]]);
       this.element.css('left', Board.dictionary[this.position[1]]);
       //if piece reaches the end of the row on opposite side crown it a king (can move all directions)
-      if(!this.king && (this.position[0] == 0 || this.position[0] == 7 )) 
+      if(!this.king && (this.position[0] == 0 || this.position[0] == 7 ))
         this.makeKing();
       Board.changePlayerTurn();
       return true;
     };
-    
+
     //tests if piece can jump anywhere
     this.canJumpAny = function () {
       if(this.canOpponentJump([this.position[0]+2, this.position[1]+2]) ||
@@ -70,7 +70,7 @@ window.onload = function() {
         return true;
       } return false;
     };
-    
+
     //tests if an opponent jump can be made to a specific place
     this.canOpponentJump = function(newPosition) {
       //find what the displacement is
@@ -101,7 +101,7 @@ window.onload = function() {
       }
       return false;
     };
-    
+
     this.opponentJump = function (tile) {
       var pieceToRemove = this.canOpponentJump(tile.position);
       //if there is a piece to be removed, remove it
@@ -111,7 +111,7 @@ window.onload = function() {
       }
       return false;
     };
-    
+
     this.remove = function () {
       //remove it and delete it from the gameboard
       this.element.css("display", "none");
@@ -122,7 +122,7 @@ window.onload = function() {
       this.position = [];
     }
   }
-  
+
   function Tile (element, position) {
     //linked DOM element
     this.element = element;
@@ -139,7 +139,7 @@ window.onload = function() {
       }
     };
   }
-  
+
   //Board object - controls logistics of game
   var Board = {
     board: gameBoard,
@@ -200,17 +200,17 @@ window.onload = function() {
     },
     //reset the game
     clear: function () {
-      location.reload(); 
+      location.reload();
     }
   }
-  
+
   //initialize the board
   Board.initalize();
-  
+
   /***
   Events
   ***/
-  
+
   //select the piece on click if it is the player's turn
   $('.piece').on("click", function () {
     var selected;
@@ -223,12 +223,12 @@ window.onload = function() {
       }
     }
   });
-  
+
   //reset game when clear button is pressed
   $('#cleargame').on("click", function () {
     Board.clear();
   });
-  
+
   //move piece when tile is clicked
   $('.tile').on("click", function () {
     //make sure a piece is selected
@@ -249,7 +249,7 @@ window.onload = function() {
                Board.changePlayerTurn(); //change back to original since another turn can be made
                piece.element.addClass('selected');
             }
-          } 
+          }
           //if it's regular then move it if no jumping is available
         } else if(inRange == 'regular') {
           if(!piece.canJumpAny()) {
@@ -261,5 +261,5 @@ window.onload = function() {
       }
     }
   });
-  
+
 }
