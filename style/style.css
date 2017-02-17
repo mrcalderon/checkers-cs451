@@ -126,9 +126,9 @@ div#board {
   height: 80vmin;
   border-radius: 5px;
   box-shadow: 1px 1px 3px #232621;
-  background-color: #B93848;
+  background-color: #ffffff ;
   overflow: hidden; }
-  div#board .tile {
+  div#board .square {
     width: 10vmin;
     height: 10vmin;
     position: absolute;
@@ -155,7 +155,7 @@ div#board {
     position: absolute;
     width: 8vmin;
     height: 8vmin;
-    background-color: #F1F1FF;
+    background-color: #232621;
     background-size: 65%;
     background-repeat: no-repeat;
     background-position: center;
@@ -166,7 +166,7 @@ div#board {
     margin-top: 1vmin;
     margin-left: 1vmin;
     cursor: pointer;
-    border: 1vmin solid #8b8bff; }
+    border: 1vmin solid #a5a4a4; }
     div#board .player2pieces .piece.selected {
       box-shadow: 0 0 10px 5px #16A8C7; }
 
