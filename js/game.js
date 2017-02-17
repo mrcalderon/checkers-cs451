@@ -1,6 +1,6 @@
 window.onload = function()
 {
-/*****************************Game Components Classes*********************************/
+/*****************************Game Component Classes*********************************/
   // initial set up of the playing board
   var boardSetup =
   [
@@ -88,14 +88,14 @@ window.onload = function()
       return false;
     },
 
-    // function to check if any jumps is available from any piece across the board
+    // function to check if any jumps is available from pieces of the current player across the board
     jumpsAvailable: function()
     {
         // iterate through the pieces
         for(var i = 0; i < pieces.length; i++)
         {
-            // only check the piece is still on the field
-            if(pieces[i].position.length !== 0)
+            // only check the pieces that are still on the board and are on the same side as the selected piece
+            if(pieces[i].position.length !== 0 && pieces[i].player === this.playerTurn)
             {
                 if(pieces[i].canJump())
                     return true;
@@ -293,7 +293,7 @@ window.onload = function()
     this.element = element;
     this.position = position;
 
-    /* function to check if square can be reached from the piece
+    /* function to check if square can be reached from a piece
        takes a piece as param
        returns whether the move from the piece to the square is regular or jump
     */

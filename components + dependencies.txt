@@ -1,0 +1,39 @@
+Board class
+    Properties
+        board: array of int array
+        playerTurn: int
+        squaresElement: DOM
+        convertUnit: String array
+    Functions
+        void initialize()
+        boolean validToMove(int row, int column)
+        boolean jumpsAvailable()
+        void switchPlayerTurn()
+Piece class
+    Properties
+        element: DOM
+        position: int array
+        player: int
+        king: boolean
+    Functions
+        void makeKing()
+        boolean move(Square square)
+        boolean canJump()
+        boolean canJumpTo(int[] newPositon)
+        boolean jump(Square square)
+        void remove()
+Square class
+    Properties
+        element: DOM
+        position: int array
+    Functions
+        String isReachable(Piece piece)
+
+Board
+    depends on Square
+    depends on Piece
+Piece
+    depends on Board
+    depends on Square
+Square
+    depends on Piece
