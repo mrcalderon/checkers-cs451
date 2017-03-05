@@ -343,11 +343,16 @@ window.onload = function()
 
   //initialize the board
   Board.initalize();
-  var username;
+  var socket, serverGame;
+  var username, playerColor;
+  var game, board;
+  var usersOnline = []; // for lobby keep track of online users
+  var myGames = []; // for lobby keep track of user's games
+  socket = io();
 
-  //////////////////////////////
-  // Menus
-  //////////////////////////////
+  /***************************** Menus ***********************************************/
+
+  // when user enter username and login, go to lobby send login event to server
   $('#login').on('click', function() {
       username = $('#username').val();
 
@@ -366,6 +371,38 @@ window.onload = function()
       console.log('Successfully connected!');
   });
 
+  // when current player just login/joined get current list of online users and any active games from before + update UI
+  socket.on('login', function(msg) {
+      console.log("from login:" + msg);
+      usersOnline = msg.users; // get list of users online
+      updateUserList(); // update online users list
+
+      myGames = msg.games; // get list of user's active games
+      updateGamesList(); // update user's active games
+  });
+
+  // a new player just joined/login update UI
+  socket.on('joinlobby', function (msg) {
+      addUser(msg);
+  });
+
+  // ???
+  socket.on('gameadd', function(msg) {
+    console.log("from gameadd: " + msg);
+    addGame(msg);
+  });
+
+  // when user server emit joingame w/ game object and color
+  socket.on('joingame', function(msg) {
+      console.log("joined as game id: " + msg.game.id );
+      playerColor = msg.color;
+      // initGame(msg.game);
+
+      $('#page-lobby').hide();
+      $('#page-game').show();
+
+  });
+
   // Handle moves you get from the server
   // called when the server calls socket.broadcast('move')
   socket.on('move', function (data) {
@@ -381,12 +418,52 @@ window.onload = function()
       Board.board[piece.position[0]][piece.position[1]] = 0;
   });
 
+  // update users list
+  var updateUserList = function() {
+      // document.getElementById('userList').innerHTML = '';
+      // $('#userList')[0].innerHTML = ''
+      $('#userList').html("");
+      usersOnline.forEach(function(user) {
+          $('#userList').append($('<button>')
+              .text(user)
+              .on('click', function() {
+                  socket.emit('invite',  user);
+              }));
+      });
+  };
+
+  // update games list
+  var updateGamesList = function() {
+      // document.getElementById('gamesList').innerHTML = '';
+      $('#gamesList').html("");
+      myGames.forEach(function(game) {
+          $('#gamesList').append($('<button>')
+              .text('#'+ game)
+              .on('click', function() {
+                  socket.emit('resumegame',  game);
+              }));
+      });
+  };
+
+  // add new player to list of online users and update UI
+  var addUser = function(userId) {
+      usersOnline.push(userId);
+      updateUserList();
+  };
+
+  var addGame = function(game) {
+      myGames.push(game.gameId);
+      updateGamesList();
+  };
+
 /*****************************Helper function*********************************/
+
   // find distance between two coordinates(position)
   var dist = function(x1, y1, x2, y2)
   {
     return Math.sqrt(Math.pow((x1-x2),2) + Math.pow((y1-y2),2));
   };
+
  /*****************************Events handler***************************************/
 
   // function to handle click on piece
