@@ -7,29 +7,19 @@ window.onload = function()
   // 0 - empty
   // 1 - player1 (red)
   // 2 - player2 (black)
-  var boardSetup =
-  [
-    [  0,  1,  0,  1,  0,  1,  0,  1 ],
-    [  1,  0,  1,  0,  1,  0,  1,  0 ],
-    [  0,  1,  0,  1,  0,  1,  0,  1 ],
-    [  0,  0,  0,  0,  0,  0,  0,  0 ],
-    [  0,  0,  0,  0,  0,  0,  0,  0 ],
-    [  2,  0,  2,  0,  2,  0,  2,  0 ],
-    [  0,  2,  0,  2,  0,  2,  0,  2 ],
-    [  2,  0,  2,  0,  2,  0,  2,  0 ]
-  ];
 
-    // var boardSetup =
-    //     [
-    //         [  2,  0,  2,  0,  2,  0,  2,  0 ],
-    //         [  0,  2,  0,  2,  0,  2,  0,  2 ],
-    //         [  2,  0,  2,  0,  2,  0,  2,  0 ],
-    //         [  0,  0,  0,  0,  0,  0,  0,  0 ],
-    //         [  0,  0,  0,  0,  0,  0,  0,  0 ],
-    //         [  0,  1,  0,  1,  0,  1,  0,  1 ],
-    //         [  1,  0,  1,  0,  1,  0,  1,  0 ],
-    //         [  0,  1,  0,  1,  0,  1,  0,  1 ],
-    //     ];
+  var boardSetup =
+[
+  [  0,  1,  0,  1,  0,  1,  0,  1 ],
+  [  1,  0,  1,  0,  1,  0,  1,  0 ],
+  [  0,  1,  0,  1,  0,  1,  0,  1 ],
+  [  0,  0,  0,  0,  0,  0,  0,  0 ],
+  [  0,  0,  0,  0,  0,  0,  0,  0 ],
+  [  2,  0,  2,  0,  2,  0,  2,  0 ],
+  [  0,  2,  0,  2,  0,  2,  0,  2 ],
+  [  2,  0,  2,  0,  2,  0,  2,  0 ]
+];
+
 
   // array of pieces on the Board
   pieces = [];
@@ -400,7 +390,8 @@ window.onload = function()
 
       $('#page-lobby').hide();
       $('#page-game').show();
-
+      $('#scoreboard').show();
+      $('#chat').show();
   });
 
   // Handle moves you get from the server
@@ -455,6 +446,30 @@ window.onload = function()
       myGames.push(game.gameId);
       updateGamesList();
   };
+
+/***************************** Chat *********************************/
+    socket.on('chat', function(username, message) {
+        // document.getElementById('chatContent').innerHTML += '<p><' + format + '>' + author + '<' + format + '> | ' + message + '</p>';
+        $(".chat-box").append($("<div class='message-box right-img'>").append($("<div class='picture'>")
+            .append("<img src='http://emojipedia-us.s3.amazonaws.com/cache/0e/70/0e7002e501eba753503fd54c60af6fb2.png'/>")
+            .append("<span class='time'>1 mins</span>"))
+            .append($("<div class='message'>")
+                .append("<span>" + username+ "</span>")
+                .append("<p>" + message+ "</p>")))
+    });
+
+    $('#sendMessage').on("click", function() {
+      var message = document.getElementById('messageInput').value;
+        socket.emit('chat', username, message);
+        $(".chat-box").append($("<div class='message-box left-img'>").append($("<div class='picture'>")
+            .append("<img src='http://emojipedia-us.s3.amazonaws.com/cache/f3/95/f395167440171c056a2d90e0ef7ffc46.png'/>")
+            .append("<span class='time'>1 mins</span>"))
+            .append($("<div class='message'>")
+                .append("<span>" + username+ "</span>")
+                .append("<p>" + message+ "</p>")))
+        document.getElementById('messageInput').value = '';
+    });
+
 
 /*****************************Helper function*********************************/
 

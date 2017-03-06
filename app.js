@@ -92,4 +92,10 @@ io.on('connection', function(socket) {
     socket.on('remove', function(data) {
         socket.broadcast.emit('remove', data);
     });
+
+    // chat
+    socket.on('chat', function(username, message) {
+        console.log('message received, sent by: ' + username + ', content: ' + message);
+        socket.broadcast.emit('chat', username, message);
+    });
 });
