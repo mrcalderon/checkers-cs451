@@ -1,5 +1,6 @@
 var pieces;
 var squares;
+var username, playerColor, playerNumber, opponentname;
 window.onload = function()
 {
 /*****************************Game Component Classes*********************************/
@@ -291,6 +292,11 @@ window.onload = function()
       if(pieceToRemove)
       {
         pieces[pieceIndex].remove();
+
+        socket.emit('remove', {
+            piece: pieceIndex
+        });
+
         return true;
       }
       return false;
@@ -304,10 +310,6 @@ window.onload = function()
         $('#player2').append("<div class='capturedPiece'></div>");
       if(this.player == 2)
         $('#player1').append("<div class='capturedPiece'></div>");
-
-      socket.emit('remove', {
-          piece: this.element.attr("id")
-      });
 
       Board.board[this.position[0]][this.position[1]] = 0;
       this.position = [];
@@ -344,7 +346,6 @@ window.onload = function()
   //initialize the board
   Board.initalize();
   var socket, serverGame;
-  var username, playerColor;
   var game, board;
   var usersOnline = []; // for lobby keep track of online users
   var myGames = []; // for lobby keep track of user's games
@@ -396,11 +397,17 @@ window.onload = function()
   socket.on('joingame', function(msg) {
       console.log("joined as game id: " + msg.game.id );
       playerColor = msg.color;
+      playerNumber = msg.number;
+      opponentname = msg.oppId;
       // initGame(msg.game);
 
       $('#page-lobby').hide();
+      $('#info').show();
+      $('#stats').show();
       $('#page-game').show();
 
+      // set the username in the info (stat) board accordingly
+      $('#info').append("<h1>" + username + " (Player" + playerNumber + ")</h1>");
   });
 
   // Handle moves you get from the server
@@ -414,8 +421,7 @@ window.onload = function()
 
   socket.on('remove', function (data) {
       var piece = pieces[data.piece];
-      piece.element.css("display", "none");
-      Board.board[piece.position[0]][piece.position[1]] = 0;
+      piece.remove();
   });
 
   // update users list
@@ -473,7 +479,8 @@ window.onload = function()
 
     // check whether a piece of the current player is clicked on
     var isPlayersTurn =($(this).parent().attr("class").split(' ')[0] == "player"+Board.playerTurn+"pieces");
-    if(isPlayersTurn) // highlight piece
+    // highlight piece if it is the current player's turn to move and if the player only tries to move his/her piece
+    if(isPlayersTurn  && Board.playerTurn === playerNumber)
     {
       if($(this).hasClass('selected'))
         selected = true;

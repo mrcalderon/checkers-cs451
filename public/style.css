@@ -238,3 +238,11 @@ div#board {
 #page-game {
   display: none;
 }
+
+#stats{
+  display: none;
+}
+
+#info{
+  display: none;
+}
