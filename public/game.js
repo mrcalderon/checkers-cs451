@@ -8,29 +8,30 @@ window.onload = function()
   // 0 - empty
   // 1 - player1 (red)
   // 2 - player2 (black)
-  var boardSetup =
-  [
-    [  0,  1,  0,  1,  0,  1,  0,  1 ],
-    [  1,  0,  1,  0,  1,  0,  1,  0 ],
-    [  0,  1,  0,  1,  0,  1,  0,  1 ],
-    [  0,  0,  0,  0,  0,  0,  0,  0 ],
-    [  0,  0,  0,  0,  0,  0,  0,  0 ],
-    [  2,  0,  2,  0,  2,  0,  2,  0 ],
-    [  0,  2,  0,  2,  0,  2,  0,  2 ],
-    [  2,  0,  2,  0,  2,  0,  2,  0 ]
-  ];
 
-    // var boardSetup =
-    //     [
-    //         [  2,  0,  2,  0,  2,  0,  2,  0 ],
-    //         [  0,  2,  0,  2,  0,  2,  0,  2 ],
-    //         [  2,  0,  2,  0,  2,  0,  2,  0 ],
-    //         [  0,  0,  0,  0,  0,  0,  0,  0 ],
-    //         [  0,  0,  0,  0,  0,  0,  0,  0 ],
-    //         [  0,  1,  0,  1,  0,  1,  0,  1 ],
-    //         [  1,  0,  1,  0,  1,  0,  1,  0 ],
-    //         [  0,  1,  0,  1,  0,  1,  0,  1 ],
-    //     ];
+  // var p2Board =
+  // [
+  //   [  0,  1,  0,  1,  0,  1,  0,  1 ],
+  //   [  1,  0,  1,  0,  1,  0,  1,  0 ],
+  //   [  0,  1,  0,  1,  0,  1,  0,  1 ],
+  //   [  0,  0,  0,  0,  0,  0,  0,  0 ],
+  //   [  0,  0,  0,  0,  0,  0,  0,  0 ],
+  //   [  2,  0,  2,  0,  2,  0,  2,  0 ],
+  //   [  0,  2,  0,  2,  0,  2,  0,  2 ],
+  //   [  2,  0,  2,  0,  2,  0,  2,  0 ]
+  // ];
+
+    var boardSetup =
+    [
+        [  0,  2,  0,  2,  0,  2,  0,  2 ],
+        [  2,  0,  2,  0,  2,  0,  2,  0 ],
+        [  0,  2,  0,  2,  0,  2,  0,  2 ],
+        [  0,  0,  0,  0,  0,  0,  0,  0 ],
+        [  0,  0,  0,  0,  0,  0,  0,  0 ],
+        [  1,  0,  1,  0,  1,  0,  1,  0 ],
+        [  0,  1,  0,  1,  0,  1,  0,  1 ],
+        [  1,  0,  1,  0,  1,  0,  1,  0 ]
+    ];
 
   // array of pieces on the Board
   pieces = [];
@@ -53,6 +54,7 @@ window.onload = function()
     // initialize the board by populating the squares and pieces array
     initalize: function()
     {
+        console.log(playerNumber);
       var piecesCount = 0;
       var squaresCount = 0;
 
@@ -96,6 +98,41 @@ window.onload = function()
             pieces[piecesCount] = new Piece($("#"+piecesCount), [parseInt(row), parseInt(column)]);
             piecesCount += 1;
           }
+
+        //   // populate Board with playing squares(black)(since the Board is white)
+        //   if(row%2 == 1)
+        //   {
+        //     if(column%2 == 0)
+        //     {
+        //       this.squaresElement.append("<div class='square' id='square"+squaresCount+"' style='top:"+this.convertUnit[row]+";left:"+this.convertUnit[column]+";'></div>"); // populate black squares
+        //       squares[squaresCount] = new Square($("#square"+squaresCount), [parseInt(row), parseInt(column)]); // instantiate square and add it to the squares list
+        //       squaresCount += 1;
+        //     }
+        //   }
+        //   else
+        //   {
+        //     if(column%2 == 1)
+        //     {
+        //       this.squaresElement.append("<div class='square' id='square"+squaresCount+"' style='top:"+this.convertUnit[row]+";left:"+this.convertUnit[column]+";'></div>"); // populate black squares
+        //       squares[squaresCount] = new Square($("#square"+squaresCount), [parseInt(row), parseInt(column)]); // instantiate square and add it to the squares list
+        //       squaresCount += 1;
+        //     }
+        //   }
+          //
+        //   // populate top half of the Board with player1 pieces
+        //   if(this.board[row][column] == 1)
+        //   {
+        //     $('.player1pieces').append("<div class='piece' id='"+piecesCount+"' style='top:"+this.convertUnit[row]+";left:"+this.convertUnit[column]+";'></div>"); // add player1 piece to the board/DOM (red)
+        //     pieces[piecesCount] = new Piece($("#"+piecesCount), [parseInt(row), parseInt(column)]); // instantiate piece w/ DOM element & x,y location
+        //     piecesCount += 1;
+        //   }
+        //   // populate bottom half of the Board with player2 pieces
+        //   else if(this.board[row][column] == 2)
+        //   {
+        //     $('.player2pieces').append("<div class='piece' id='"+piecesCount+"' style='top:"+this.convertUnit[row]+";left:"+this.convertUnit[column]+";'></div>"); // add player2 piece to the board/DOM (black)
+        //     pieces[piecesCount] = new Piece($("#"+piecesCount), [parseInt(row), parseInt(column)]);
+        //     piecesCount += 1;
+        //   }
         }
       }
     },
@@ -164,9 +201,9 @@ window.onload = function()
     this.player = '';
     // find out which player this piece belongs to
     if(this.element.attr("id") < 12)
-      this.player = 1;
-    else
       this.player = 2;
+    else
+      this.player = 1;
 
     this.king = false;
     // function to make this piece a king
@@ -191,12 +228,12 @@ window.onload = function()
       // make sure a piece doesn't go backwards if it is not a king
       if(this.player == 1 && this.king == false)
       {
-        if(square.position[0] < this.position[0])
+        if(square.position[0] > this.position[0])
             return false;
       }
       else if(this.player == 2 && this.king == false)
       {
-        if(square.position[0] > this.position[0])
+        if(square.position[0] < this.position[0])
             return false;
       }
 
@@ -210,7 +247,7 @@ window.onload = function()
       this.element.css('left', Board.convertUnit[this.position[1]]); // move horizontally
 
       // make a piece a king(can move all directions) if it reaches the opposite side of the board
-      if(!this.king &&(this.position[0] == 0 || this.position[0] == 7 ))
+      if(!this.king && (this.position[0] == 0 || this.position[0] == 7 ))
         this.makeKing();
 
         socket.emit('move', {
@@ -249,12 +286,12 @@ window.onload = function()
       // make sure object doesn't go backwards if it is not a king
       if(this.player == 1 && this.king == false)
       {
-        if(newPosition[0] < this.position[0])
+        if(newPosition[0] > this.position[0])
             return false;
       }
       else if(this.player == 2 && this.king == false)
       {
-        if(newPosition[0] > this.position[0])
+        if(newPosition[0] < this.position[0])
             return false;
       }
 
@@ -407,7 +444,7 @@ window.onload = function()
       $('#page-game').show();
 
       // set the username in the info (stat) board accordingly
-      $('#info').append("<h1>" + username + " (Player" + playerNumber + ")</h1>");
+      $('#info').append("<h1>" + username + " (Player" + playerNumber + ")'s Turn'</h1>");
   });
 
   // Handle moves you get from the server
@@ -480,7 +517,7 @@ window.onload = function()
     // check whether a piece of the current player is clicked on
     var isPlayersTurn =($(this).parent().attr("class").split(' ')[0] == "player"+Board.playerTurn+"pieces");
     // highlight piece if it is the current player's turn to move and if the player only tries to move his/her piece
-    if(isPlayersTurn  && Board.playerTurn === playerNumber)
+    if(isPlayersTurn && Board.playerTurn === playerNumber)
     {
       if($(this).hasClass('selected'))
         selected = true;
