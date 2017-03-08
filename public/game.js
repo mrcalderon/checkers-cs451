@@ -255,8 +255,9 @@ window.onload = function()
             piece: this.element.attr("id")
         });
 
-      // switch turn afterwards
-      Board.switchPlayerTurn();
+      // switch turn if no more jumps can be made from current piece
+      if(!this.canJump())
+        Board.switchPlayerTurn();
 
       return true;
     };
@@ -444,7 +445,7 @@ window.onload = function()
       $('#page-game').show();
 
       // set the username in the info (stat) board accordingly
-      $('#info').append("<h1>" + username + " (Player" + playerNumber + ")'s Turn'</h1>");
+      $('#info').append("<h1>" + username + " (Player" + playerNumber + ")</h1>");
   });
 
   // Handle moves you get from the server
@@ -552,16 +553,7 @@ window.onload = function()
         if(isReachable == 'jump')
         {
           if(piece.jump(square)) // remove piece being eaten
-          {
             piece.move(square); //move piece to new square
-            // check if another move can be made(double and triple jumps)
-            if(piece.canJump())
-            {
-               // if further jumps are possible, revert turn(since turn is switched in move)
-               Board.switchPlayerTurn();
-               piece.element.addClass('selected');
-            }
-          }
         }
         // if the move is regular, check if a jump is available elsewhere
         else if(isReachable == 'regular')
