@@ -74,8 +74,8 @@ io.on('connection', function(socket) {
 
         console.log('starting game: ' + game.id);
         // send joingame event to the opponent that the user invites/challenges w/ game object and their respective color
-        lobbyUsers[game.users.white].emit('joingame', {game: game, color: 'white'});
-        lobbyUsers[game.users.black].emit('joingame', {game: game, color: 'black'});
+        lobbyUsers[game.users.white].emit('joingame', {game: game, color: 'white', number: 1, oppId: opponentId});
+        lobbyUsers[game.users.black].emit('joingame', {game: game, color: 'black', number: 2, oppId: opponentId});
 
         delete lobbyUsers[game.users.white];
         delete lobbyUsers[game.users.black];
