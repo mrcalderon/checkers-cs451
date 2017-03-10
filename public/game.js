@@ -133,7 +133,7 @@ window.onload = function()
     },
 
     // function to reset the game
-    clear: function()
+    refreshToLogin: function()
     {
       location.reload();
     }
@@ -387,7 +387,7 @@ window.onload = function()
       console.log("joined as game id: " + msg.game.id );
       playerColor = msg.color;
       // initGame(msg.game);
-
+      rotateBoard(msg);
       $('#page-lobby').hide();
       $('#page-game').show();
       $('#scoreboard').show();
@@ -479,6 +479,11 @@ window.onload = function()
     return Math.sqrt(Math.pow((x1-x2),2) + Math.pow((y1-y2),2));
   };
 
+  function rotateBoard(msg) {
+      if (msg.color === "black")
+        $("#board").css("transform", "rotate(0deg)")
+  }
+
  /*****************************Events handler***************************************/
 
   // function to handle click on piece
@@ -499,9 +504,11 @@ window.onload = function()
   });
 
   // function to handle click on "Reset Game"
-  $('#cleargame').on("click", function()
+  $('#resign').on("click", function()
   {
-    Board.clear();
+      if (confirm("Are you sure you want to resign?") == true) {
+          alert("You lose");
+      }
   });
 
   // function to handle click on a square(move piece)
