@@ -10,7 +10,7 @@ $shadow: 1px 1px 3px $dark
 @mixin gamePiece($color, $factor)
   width: 8vmin * $factor
   height: 8vmin * $factor
-  background: 
+  background:
     color: $color
     size: 65%
     repeat: no-repeat
@@ -19,7 +19,7 @@ $shadow: 1px 1px 3px $dark
   display: inline-block
   box-sizing: border-box
   transition: all 0.2s linear
-  //king image from flaticon.com
+//king image from flaticon.com
 
 html, body
   position: absolute
@@ -34,28 +34,28 @@ html, body
   font-size: 16px
   background:
     color: $purple
-  
+
   h2
     font-size: 1.3em
-    
+
   h3
     font-size: 1.1em
-    
+
   a
     text-decoration: none
     color: $fontColor
     font-weight: 700
-    
+
     &:hover
       text-decoration: underline
-    
+
   hr
     border: 0
     height: 1px
     background:
       color: #333
       image: linear-gradient(to right, $fontColor, #ccc)
-      
+
   .clearfix
     clear: both
 
@@ -66,14 +66,14 @@ div.column
   height: 100%
   min-height: 100%
   width: 50%
-  
+
 @media screen and (max-width: 1000px)
   div.column
     width: 100% !important
     overflow: hidden
     height: auto
-        
-div.info 
+
+div.info
   width: 70%
   margin: 15vmin auto 0
   box-sizing: border-box
@@ -82,48 +82,49 @@ div.info
   color: $purple
   border-radius: 3px
   box-shadow: $shadow
-  
+
 div.stats
   @extend div.info
   margin: 50px auto !important
-  
+
   @mixin div-style($bgColor)
     text-align: center
     display: inline-block
     width: 50%
     float: left
-    background-color: $bgColor  
+    background-color: $bgColor
     box-sizing: border-box
     padding: 0 15px 20px
-  
+
   .wrapper
-    display: flex /*for equal height columns*/
-  
+    display: flex
+  /*for equal height columns*/
+
   #player1
     @include div-style($red)
     border-top-left-radius: 3px
     color: $dark
-    
+
     .capturedPiece
       @include gamePiece($dark, 0.3)
       margin: 5px
-  
+
   #player2
     @include div-style($dark)
     border-top-right-radius: 3px
     color: $red
-    
+
     .capturedPiece
       @include gamePiece($red, 0.3)
       margin: 5px
-  
+
   div.turn
     height: 10px
     width: 100%
     background: linear-gradient(to right, #BEEE62 50%, transparent 50%)
     border-radius: 0 0 3px 3px
-      
-  button#cleargame
+
+  button#resign
     display: block
     border: 0
     color: $light
@@ -136,7 +137,7 @@ div.stats
     transition: background-color 0.15s linear
     &:hover
       background-color: darken($blue, 20%)
-    
+
 div#board
   position: absolute
   top: calc(50% - 40vmin)
@@ -146,8 +147,9 @@ div#board
   border-radius: 5px
   box-shadow: $shadow
   background-color: $red
-  overflow: hidden //to maintain rounded corners
-  
+  overflow: hidden
+  //to maintain rounded corners
+
   .tile
     width: 10vmin
     height: 10vmin
@@ -165,7 +167,7 @@ div#board
 
       &.selected
         box-shadow: 0 0 10px 5px $blue
-        
+
   .player2pieces
     .piece
       position: absolute
@@ -177,4 +179,4 @@ div#board
 
       &.selected
         box-shadow: 0 0 10px 5px $blue
-      
+

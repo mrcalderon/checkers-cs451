@@ -7,29 +7,19 @@ window.onload = function()
   // 0 - empty
   // 1 - player1 (red)
   // 2 - player2 (black)
-  var boardSetup =
-  [
-    [  0,  1,  0,  1,  0,  1,  0,  1 ],
-    [  1,  0,  1,  0,  1,  0,  1,  0 ],
-    [  0,  1,  0,  1,  0,  1,  0,  1 ],
-    [  0,  0,  0,  0,  0,  0,  0,  0 ],
-    [  0,  0,  0,  0,  0,  0,  0,  0 ],
-    [  2,  0,  2,  0,  2,  0,  2,  0 ],
-    [  0,  2,  0,  2,  0,  2,  0,  2 ],
-    [  2,  0,  2,  0,  2,  0,  2,  0 ]
-  ];
 
-    // var boardSetup =
-    //     [
-    //         [  2,  0,  2,  0,  2,  0,  2,  0 ],
-    //         [  0,  2,  0,  2,  0,  2,  0,  2 ],
-    //         [  2,  0,  2,  0,  2,  0,  2,  0 ],
-    //         [  0,  0,  0,  0,  0,  0,  0,  0 ],
-    //         [  0,  0,  0,  0,  0,  0,  0,  0 ],
-    //         [  0,  1,  0,  1,  0,  1,  0,  1 ],
-    //         [  1,  0,  1,  0,  1,  0,  1,  0 ],
-    //         [  0,  1,  0,  1,  0,  1,  0,  1 ],
-    //     ];
+  var boardSetup =
+[
+  [  0,  1,  0,  1,  0,  1,  0,  1 ],
+  [  1,  0,  1,  0,  1,  0,  1,  0 ],
+  [  0,  1,  0,  1,  0,  1,  0,  1 ],
+  [  0,  0,  0,  0,  0,  0,  0,  0 ],
+  [  0,  0,  0,  0,  0,  0,  0,  0 ],
+  [  2,  0,  2,  0,  2,  0,  2,  0 ],
+  [  0,  2,  0,  2,  0,  2,  0,  2 ],
+  [  2,  0,  2,  0,  2,  0,  2,  0 ]
+];
+
 
   // array of pieces on the Board
   pieces = [];
@@ -143,7 +133,7 @@ window.onload = function()
     },
 
     // function to reset the game
-    clear: function()
+    refreshToLogin: function()
     {
       location.reload();
     }
@@ -397,10 +387,11 @@ window.onload = function()
       console.log("joined as game id: " + msg.game.id );
       playerColor = msg.color;
       // initGame(msg.game);
-
+      rotateBoard(msg);
       $('#page-lobby').hide();
       $('#page-game').show();
-
+      $('#scoreboard').show();
+      $('#chat').show();
   });
 
   // Handle moves you get from the server
@@ -456,6 +447,30 @@ window.onload = function()
       updateGamesList();
   };
 
+/***************************** Chat *********************************/
+    socket.on('chat', function(username, message) {
+        // document.getElementById('chatContent').innerHTML += '<p><' + format + '>' + author + '<' + format + '> | ' + message + '</p>';
+        $(".chat-box").append($("<div class='message-box right-img'>").append($("<div class='picture'>")
+            .append("<img src='http://emojipedia-us.s3.amazonaws.com/cache/0e/70/0e7002e501eba753503fd54c60af6fb2.png'/>")
+            .append("<span class='time'>1 mins</span>"))
+            .append($("<div class='message'>")
+                .append("<span>" + username+ "</span>")
+                .append("<p>" + message+ "</p>")))
+    });
+
+    $('#sendMessage').on("click", function() {
+      var message = document.getElementById('messageInput').value;
+        socket.emit('chat', username, message);
+        $(".chat-box").append($("<div class='message-box left-img'>").append($("<div class='picture'>")
+            .append("<img src='http://emojipedia-us.s3.amazonaws.com/cache/f3/95/f395167440171c056a2d90e0ef7ffc46.png'/>")
+            .append("<span class='time'>1 mins</span>"))
+            .append($("<div class='message'>")
+                .append("<span>" + username+ "</span>")
+                .append("<p>" + message+ "</p>")))
+        document.getElementById('messageInput').value = '';
+    });
+
+
 /*****************************Helper function*********************************/
 
   // find distance between two coordinates(position)
@@ -463,6 +478,11 @@ window.onload = function()
   {
     return Math.sqrt(Math.pow((x1-x2),2) + Math.pow((y1-y2),2));
   };
+
+  function rotateBoard(msg) {
+      if (msg.color === "black")
+        $("#board").css("transform", "rotate(0deg)")
+  }
 
  /*****************************Events handler***************************************/
 
@@ -484,9 +504,11 @@ window.onload = function()
   });
 
   // function to handle click on "Reset Game"
-  $('#cleargame').on("click", function()
+  $('#resign').on("click", function()
   {
-    Board.clear();
+      if (confirm("Are you sure you want to resign?") == true) {
+          alert("You lose");
+      }
   });
 
   // function to handle click on a square(move piece)
