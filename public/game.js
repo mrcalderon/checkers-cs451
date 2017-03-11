@@ -164,17 +164,14 @@ window.onload = function()
     {
       this.element.css("backgroundImage", "url('images/king"+this.player+".png')");
       this.king = true;
-    }
+    };
 
-    /* function to move the piece
+    /* function to move the piece (either a regular move or a jump)
        param is a square to move to
        returns true if it is a valid move, false otherwise
     */
     this.move = function(square)
     {
-      // unselect the piece after moving is done
-      this.element.removeClass('selected');
-
       if(!Board.validToMove(square.position[0], square.position[1])) // check if move is value if true continue else break
         return false;
 
@@ -190,29 +187,75 @@ window.onload = function()
             return false;
       }
 
-      // remove the piece and generate in its new position(square)
-      Board.board[this.position[0]][this.position[1]] = 0; // make square empty
-      Board.board[square.position[0]][square.position[1]] = this.player; // make the new square as the current player
-      this.position = [square.position[0], square.position[1]]; // set the piece position as the new square
-      // update the piece's position in css
-      // position coordinates x,y will be converted to viewport units(vmin)
-      this.element.css('top', Board.convertUnit[this.position[0]]); // move vertically
-      this.element.css('left', Board.convertUnit[this.position[1]]); // move horizontally
+      // check if piece is in jumping position before the move
+      var didJump = this.canJump();
 
-      // make a piece a king(can move all directions) if it reaches the opposite side of the board
-      if(!this.king &&(this.position[0] == 0 || this.position[0] == 7 ))
-        this.makeKing();
+      // check if a square is reachable from current piece
+      var isReachable = square.isReachable(this.position);
+      if(isReachable)
+      {
+        // if the square is within jump distance
+        if(isReachable == 'jump')
+        {
+            // if the move is a jump, make a jump
+            if(this.canJump())
+            {
+              // remove piece being eaten
+              this.jump(square); // remove piece being eaten
+              // move piece to new square
+              this.moveToSquare(square);
+            }
+            else
+                return false;
+        }
+        // if the move is regular, check if a jump is available elsewhere
+        else if(isReachable == 'regular')
+        {
+          // if a jump is not available, make the move
+          if(!Board.jumpsAvailable())
+          {
+              // move piece to new square
+              this.moveToSquare(square);
+          }
+          // if a jump is available, don't allow a regular move
+          else
+          {
+            if(Board.playerTurn === playerNumber)
+              alert("You must jump when possible!");
 
-        socket.emit('move', {
-            square: square,
-            piece: this.element.attr("id")
-        });
+            return false;
+          }
+        }
 
-        // switch turn if no more jumps can be made from current piece
-        if(!this.canJump())
+        // make a piece a king(can move all directions) if it reaches the opposite side of the board
+        if(!this.king &&(this.position[0] == 0 || this.position[0] == 7 ))
+          this.makeKing();
+
+        // switch turn if no double/triple jumps can be made from current piece
+        if(!(didJump && this.canJump()))
+        {
           Board.switchPlayerTurn();
+          // unselect the piece after moving is done
+          this.element.removeClass('selected');
+        }
 
-      return true;
+        return true;
+      }
+      else
+        return false;
+    };
+
+    // function that execute the actual move
+    // takes a square to move to
+    this.moveToSquare = function(square) {
+        // remove the piece and generate in its new position(square)
+        Board.board[this.position[0]][this.position[1]] = 0; // make square empty
+        Board.board[square.position[0]][square.position[1]] = this.player; // make the new square as the current player
+        this.position = [square.position[0], square.position[1]]; // set the piece position as the new square
+        // update the piece's position in css
+        // position coordinates x,y will be converted to viewport units(vmin)
+        this.element.css('top', Board.convertUnit[this.position[0]]); // move vertically
+        this.element.css('left', Board.convertUnit[this.position[1]]); // move horizontally
     };
 
     // function to check if the piece can make a jump anywhere
@@ -282,11 +325,11 @@ window.onload = function()
       // if a piece is captured, remove it
       if(pieceToRemove)
       {
-        pieces[pieceIndex].remove();
+          socket.emit('remove', {
+              piece: pieceIndex
+          });
 
-        socket.emit('remove', {
-            piece: pieceIndex
-        });
+        pieceToRemove.remove();
 
         return true;
       }
@@ -323,11 +366,11 @@ window.onload = function()
        takes a piece as param
        returns whether the move from the piece to the square is regular or jump
     */
-    this.isReachable = function(piece)
+    this.isReachable = function(position)
     {
-      if(dist(this.position[0], this.position[1], piece.position[0], piece.position[1]) == Math.sqrt(2))
+      if(dist(this.position[0], this.position[1], position[0], position[1]) == Math.sqrt(2))
         return 'regular';
-      else if(dist(this.position[0], this.position[1], piece.position[0], piece.position[1]) == 2*Math.sqrt(2))
+      else if(dist(this.position[0], this.position[1], position[0], position[1]) == 2*Math.sqrt(2))
         //jump move
         return 'jump';
     };
@@ -405,15 +448,15 @@ window.onload = function()
   // Handle moves you get from the server
   // called when the server calls socket.broadcast('move')
   socket.on('move', function (data) {
-      // console.log(move);
-      var square = data.square;
+      var square = squares[data.square];
       var piece = pieces[data.piece];
       piece.move(square);
   });
 
   socket.on('remove', function (data) {
       var piece = pieces[data.piece];
-      piece.remove();
+      if(piece.position.length > 0)
+        piece.remove();
   });
 
   // update users list
@@ -529,28 +572,42 @@ window.onload = function()
       var squareID = $(this).attr("id").replace(/square/, ''); // get id
       var square = squares[squareID]; // get square from squares list
       // find the piece being selected
-      var piece = pieces[$('.selected').attr("id")];
+      var pieceID = $('.selected').attr("id");
+      var piece = pieces[pieceID];
+
+      // emit the move to the server
+      socket.emit('move', {
+          square: squareID,
+          piece: pieceID
+      });
+
+      // move the piece to designated square
+      piece.move(square);
+
       // check if the square is in reachable from the selected piece
-      var isReachable = square.isReachable(piece); // calculate move return 'regular' or 'jump'
-      if(isReachable)
-      {
-        // if the move is a jump, make a jump
-        if(isReachable == 'jump')
-        {
-          if(piece.jump(square)) // remove piece being eaten
-            piece.move(square); //move piece to new square
-        }
-        // if the move is regular, check if a jump is available elsewhere
-        else if(isReachable == 'regular')
-        {
-          if(!Board.jumpsAvailable()) {
-            piece.move(square);
-          }
-          // if a jump is possible, don't allow a regular move
-          else
-            alert("You must jump when possible!");
-        }
-      }
+    //   var isReachable = square.isReachable(piece); // calculate move return 'regular' or 'jump'
+    //   if(isReachable)
+    //   {
+    //     // if the move is a jump, make a jump
+    //     if(isReachable == 'jump')
+    //     {
+    //       if(piece.canJump())
+    //       {
+    //         piece.move(square); //move piece to new square
+    //         piece.jump(square); // remove piece being eaten
+    //       }
+    //     }
+    //     // if the move is regular, check if a jump is available elsewhere
+    //     else if(isReachable == 'regular')
+    //     {
+    //       if(!Board.jumpsAvailable()) {
+    //         piece.move(square);
+    //       }
+    //       // if a jump is possible, don't allow a regular move
+    //       else
+    //         alert("You must jump when possible!");
+    //     }
+    //   }
     }
   });
 };
