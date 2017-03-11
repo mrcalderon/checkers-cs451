@@ -1,0 +1,13 @@
+diff a/app.js b/app.js	(rejected hunks)
+@@ -127,8 +127,11 @@
+          console.log('message received, sent by: ' + username + ', content: ' + message);
+          socket.broadcast.emit('chat', username, message);
+      });
+++<<<<<<< HEAD
+ +
+ +    socket.on('rematch', function() {
+ +        socket.broadcast.emit('rematch');
+ +    });
+++=======
+++>>>>>>> combined 3d codes
+  });
