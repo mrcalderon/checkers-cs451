@@ -4,72 +4,101 @@
     <title>HTML5 Checkers</title>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>-->
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
-    <link  href="http://fonts.googleapis.com/css?family=Cabin:400,500,600,bold" rel="stylesheet" type="text/css" >
-    <link  href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow:regular,bold" rel="stylesheet" type="text/css" >
     <link href="style.css" rel="stylesheet">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="icon" href="images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="lib/bootstrap.min.css">
     <script src="game.js"></script>
-
     <script src="lib/socket.io-1.2.0.js"></script>
     <script src="lib/jquery-1.11.1.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
 </head>
 <body>
-<!--<div class="page login" id='page-login'>-->
-    <!--<div class='logo'></div>-->
-    <!--<input id='username'></input>-->
-    <!--<button id='login'>Login</button>-->
-<!--</div>-->
-<!--<div class="page lobby" id='page-lobby'>-->
-    <!--<h1>Real Chess</h1>-->
-    <!--<h2 id='userLabel'></h2>-->
-    <!--<h3>Active games</h3>-->
-    <!--<div id='gamesList'>-->
-        <!--No active games-->
-    <!--</div>-->
-    <!--<h3>Online players</h3>-->
-    <!--<div id='userList'>-->
-        <!--No users online-->
-    <!--</div>-->
-<!--</div>-->
-<!--<div class="column">-->
-    <!--<div class="info">-->
-        <!--<h1>Checkers</h1>-->
-    <!--</div>-->
-    <!--<div class="stats">-->
-        <!--<h2>Game Statistics</h2>-->
-        <!--<div class="wrapper">-->
-            <!--<div id="player1">-->
-                <!--<h3>Player 1 (Top)</h3>-->
-            <!--</div>-->
-            <!--<div id="player2">-->
-                <!--<h3>Player 2 (Bottom)</h3>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="clearfix"></div>-->
-        <!--<div class="turn"></div>-->
-        <!--<button id="cleargame">Reset Game</button>-->
-    <!--</div>-->
-<!--</div>-->
-<div class="column" id='page-game' style="width:100%">
-    <div class="wrapper w1" style="position: relative">
-        <div class="cube" style="position: absolute; left: 0px; top: 175px;">
-            <div class="side top">
-                <div class="div2">
-                    <div id="board">
-                        <div class="squares"></div>
-                        <div class="pieces">
-                            <div class="player1pieces"></div>
-                            <div class="player2pieces"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="side bottom">2</div>
-        </div>
-    </div>>
+
+<div class="page login" id='page-login'>
+    <div class='logo'></div>
+    <input id='username'></input>
+    <button id='login'>Login</button>
 </div>
+
+<div class="page lobby" id='page-lobby'>
+    <h1>Real Chess</h1>
+    <h2 id='userLabel'></h2>
+    <h3>Active games</h3>
+    <div id='gamesList'>
+        No active games
+    </div>
+    <h3>Online players</h3>
+    <div id='userList'>
+        No users online
+    </div>
+</div>
+
+<div class="column" id="scoreboard">
+    <div class="info" id='info'>
+    </div>
+    <div class="stats">
+        <h2>Game Statistics</h2>
+        <div class="wrapper">
+            <div id="player1">
+                <h3>Player 1</h3>
+            </div>
+            <div id="player2">
+                <h3>Player 2</h3>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="turn"></div>
+        <button id="resign">Resign</button>
+    </div>
+    <div class="chat">
+        <div class="container" id="chat" style="display: table-row;">
+            <div class="header">
+                <h2>Messages</h2>
+                <a href="#" title="Add Friend to this chat">+</a>
+            </div>
+
+            <div class="chat-box">
+                <!--<div class="message-box left-img">-->
+                    <!--<div class="picture">-->
+                        <!--<img src="http://emojipedia-us.s3.amazonaws.com/cache/0e/70/0e7002e501eba753503fd54c60af6fb2.png" title="user name"/>-->
+                        <!--<span class="time">10 mins</span>-->
+                    <!--</div>-->
+                    <!--<div class="message">-->
+                        <!--<span>Bobby Giangeruso</span>-->
+                        <!--<p>Hey Mike, how are you doing?</p>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="message-box right-img">-->
+                    <!--<div class="picture">-->
+                        <!--<img src="http://emojipedia-us.s3.amazonaws.com/cache/f3/95/f395167440171c056a2d90e0ef7ffc46.png" title="user name"/>-->
+                        <!--<span class="time">2 mins</span>-->
+                    <!--</div>-->
+                    <!--<div class="message">-->
+                        <!--<span>Mike Moloney</span>-->
+                        <!--<p>Pretty good, Eating nutella, nommommom</p>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+            <div class="enter-message">
+                <input id="messageInput" type="text" placeholder="Enter your message.."/>
+                <a href="#" id="sendMessage" class="send">Send</a>
+            </div>
+    </div>
+    </div>
+</div>
+<div class="column" id='page-game'>
+    <div id="board">
+        <div class="squares"></div>
+        <div class="pieces">
+            <div class="player1pieces"></div>
+            <div class="player2pieces"></div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
