@@ -5,8 +5,11 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http); // setup socket server
 var port = process.env.PORT || 3000;
 
+// list of users online in the lobby ready to play
 var lobbyUsers = {};
+// list of all users that are connected to the server
 var users = {};
+// list of active games
 var activeGames = {};
 
 app.get('/', function(req, res) {
@@ -61,7 +64,7 @@ io.on('connection', function(socket) {
         var game = {
             id: Math.floor((Math.random() * 100) + 1),
             board: null,
-            users: {white: socket.userId, black: opponentId}
+            users: {red: socket.userId, black: opponentId}
         };
 
         // add gameId to socket and add to list of user's list of active games
@@ -69,19 +72,45 @@ io.on('connection', function(socket) {
         activeGames[game.id] = game;
 
         // update gameId to both user object list of games
-        users[game.users.white].games[game.id] = game.id;
+        users[game.users.red].games[game.id] = game.id;
         users[game.users.black].games[game.id] = game.id;
 
         console.log('starting game: ' + game.id);
         // send joingame event to the opponent that the user invites/challenges w/ game object and their respective color
-        lobbyUsers[game.users.white].emit('joingame', {game: game, color: 'white', number: 1, oppId: opponentId});
-        lobbyUsers[game.users.black].emit('joingame', {game: game, color: 'black', number: 2, oppId: opponentId});
+        // lobbyUsers[game.users.white].emit('joingame', {game: game, color: 'white'});
+        // lobbyUsers[game.users.black].emit('joingame', {game: game, color: 'black'});
+        socket.broadcast.emit('joingame', {game: game, color: 'black', number: 2});
 
-        delete lobbyUsers[game.users.white];
+        // Remove player from the lobbyUsers dic
+        delete lobbyUsers[game.users.red];
         delete lobbyUsers[game.users.black];
 
         // ???
         socket.broadcast.emit('gameadd', {gameId: game.id, gameState:game});
+    });
+
+    socket.on('resumegame', function(gameId) {
+        console.log('ready to resume game: ' + gameId);
+
+        socket.gameId = gameId;
+        var game = activeGames[gameId];
+
+        users[game.users.white].games[game.id] = game.id;
+        users[game.users.black].games[game.id] = game.id;
+
+        console.log('resuming game: ' + game.id);
+        if (lobbyUsers[game.users.white]) {
+            // lobbyUsers[game.users.white].emit('joingame', {game: game, color: 'white'});
+            socket.emit('joingame', {game: game, color: 'red'});
+            delete lobbyUsers[game.users.white];
+        }
+
+        if (lobbyUsers[game.users.black]) {
+            // lobbyUsers[game.users.black] &&
+            // lobbyUsers[game.users.black].emit('joingame', {game: game, color: 'black'});
+            socket.emit('joingame', {game: game, color: 'black'});
+            delete lobbyUsers[game.users.black];
+        }
     });
 
     // Called when the client calls socket.emit('move')
@@ -97,5 +126,9 @@ io.on('connection', function(socket) {
     socket.on('chat', function(username, message) {
         console.log('message received, sent by: ' + username + ', content: ' + message);
         socket.broadcast.emit('chat', username, message);
+    });
+
+    socket.on('rematch', function() {
+        socket.broadcast.emit('rematch');
     });
 });
