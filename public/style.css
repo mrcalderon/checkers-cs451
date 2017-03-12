@@ -1,4 +1,4 @@
-.wrapper {
+.wrapper1 {
   width: 200px;
   height: 100px;
   position: absolute;
@@ -222,7 +222,9 @@ div#board {
     background-color:#0C0C0C;
     border: 1px solid #2F2311;
     overflow: hidden;
-    /*transform: rotate(180deg);*/
+
+    transform: rotate(180deg);
+            
 }
 
 div#board .square {
