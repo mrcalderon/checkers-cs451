@@ -398,7 +398,6 @@ window.onload = function () {
 
     // when current player just login/joined get current list of online users and any active games from before + update UI
     socket.on('login', function (msg) {
-        console.log("from login:" + msg);
         lobbyUsers = msg.users; // get list of users online
         updateUserList(); // update online users list
 
@@ -420,8 +419,6 @@ window.onload = function () {
     // when user server emit joingame w/ game object and color
     socket.on('joingame', function (msg) {
         console.log("joined as game id: " + msg.game.id);
-        console.log("a"+msg.number);
-        console.log(playerNumber);
         playerColor = msg.color;
         playerNumber = msg.number;
         gameId = msg.game.id;
