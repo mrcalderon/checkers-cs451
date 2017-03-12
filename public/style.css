@@ -339,23 +339,6 @@ div#board .player2pieces .piece.selected {
   -webkit-transition: -webkit-box-shadow .1s ease-in-out;
 }
 
-.div2 {
-  position: absolute;
-  top: calc(50% - 40vmin);
-  left: calc(50% - 40vmin);
-  width: 80vmin;
-  height: 80vmin;
-  border-radius: 5px;
-  box-shadow: 1px 1px 3px #232621;
-  /*background-color: #ffffff ;*/
-  overflow: hidden;
-  padding: 50px;
-  border: 1px solid #ffd4b8;
-  background: url('http://wallpapercave.com/wp/CyT83yY.jpg') no-repeat 0 0 scroll;
-  background-color:#0C0C0C;
-  background-size: 120px;
-  background-repeat: repeat;
-}
 
 /*# sourceMappingURL=style.css.map */
 
