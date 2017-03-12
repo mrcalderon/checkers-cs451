@@ -355,8 +355,8 @@ window.onload = function () {
 
     //initialize the board
     Board.initalize();
-    var socket, serverGame;
-    var game, board;
+    var socket;
+    var gameId;
     var lobbyUsers = []; // for lobby keep track of online users
     var myGames = []; // for lobby keep track of user's games
     socket = io();
@@ -424,7 +424,7 @@ window.onload = function () {
         console.log(playerNumber);
         playerColor = msg.color;
         playerNumber = msg.number;
-        // initGame(msg.game);
+        gameId = msg.game.id;
 
         rotateBoard(msg);
         $('#page-lobby').hide();
@@ -460,6 +460,14 @@ window.onload = function () {
 
     socket.on('leavelobby', function (msg) {
         removeUser(msg);
+    });
+
+    socket.on('gameId', function (game_id) {
+        gameId = game_id;
+    });
+
+    socket.on('logout', function (msg) {
+        removeUser(msg.username);
     });
 
     // update users list
@@ -513,6 +521,16 @@ window.onload = function () {
     var addGame = function (game) {
         myGames.push(game.gameId);
         updateGamesList();
+    };
+
+    var removeGame = function (gameId) {
+        var i;
+        for (i = 0; i < myGames.length; i++) {
+            if (myGames[i] == gameId) {
+                myGames.splice(i,1);
+            }
+            updateGamesList();
+        }
     };
 
     var removeUser = function (userId) {
@@ -666,6 +684,7 @@ window.onload = function () {
         username = $('#username').val();
 
         if (username.length > 0) {
+            removeGame(gameId);
             $('#userLabel').text(username);
             socket.emit('login', username);
             $('#page-lobby').show();
