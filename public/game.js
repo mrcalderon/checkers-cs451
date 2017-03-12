@@ -420,6 +420,8 @@ window.onload = function () {
     // when user server emit joingame w/ game object and color
     socket.on('joingame', function (msg) {
         console.log("joined as game id: " + msg.game.id);
+        console.log("a"+msg.number);
+        console.log(playerNumber);
         playerColor = msg.color;
         playerNumber = msg.number;
         // initGame(msg.game);
