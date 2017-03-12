@@ -223,8 +223,8 @@ div#board {
     border: 1px solid #2F2311;
     overflow: hidden;
 
-    transform: rotate(180deg);
-            
+    transform: rotate(180deg)
+    /*transform: rotateX(-40deg) rotateY(0deg);*/
 }
 
 div#board .square {
