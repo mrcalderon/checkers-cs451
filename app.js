@@ -95,14 +95,14 @@ io.on('connection', function(socket) {
         socket.gameId = gameId;
         var game = activeGames[gameId];
 
-        users[game.users.white].games[game.id] = game.id;
+        users[game.users.red].games[game.id] = game.id;
         users[game.users.black].games[game.id] = game.id;
 
         console.log('resuming game: ' + game.id);
-        if (lobbyUsers[game.users.white]) {
+        if (lobbyUsers[game.users.red]) {
             // lobbyUsers[game.users.white].emit('joingame', {game: game, color: 'white'});
             socket.emit('joingame', {game: game, color: 'red'});
-            delete lobbyUsers[game.users.white];
+            delete lobbyUsers[game.users.red];
         }
 
         if (lobbyUsers[game.users.black]) {

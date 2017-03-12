@@ -403,8 +403,10 @@ window.onload = function () {
         // $('#userList')[0].innerHTML = ''
         $('#userList').html("");
         lobbyUsers.forEach(function (user) {
-            $('#userList').append($('<button>')
-                .text(user)
+            // $('#userList').append($('<button>')
+            //     .text(user)
+            $('#userList').append($("<li>")
+                .append("<label>"+user+"</label>")
                 .on('click', function () {
                     socket.emit('invite', user);
                     playerColor = 'red';
@@ -421,8 +423,10 @@ window.onload = function () {
         // document.getElementById('gamesList').innerHTML = '';
         $('#gamesList').html("");
         myGames.forEach(function (game) {
-            $('#gamesList').append($('<button>')
-                .text('#' + game)
+            // $('#gamesList').append($('<button>')
+            //     .text('#' + game)
+            $('#userList').append($("<li>")
+                .append("<label>#"+game+"</label>")
                 .on('click', function () {
                     socket.emit('resumegame', game);
                 }));
@@ -597,10 +601,16 @@ window.onload = function () {
     });
 
     $('#back2lobby').on("click", function () {
-        $('#page-lobby').show();
-        $('#page-game').hide();
-        $('#scoreboard').hide();
-        $('#chat').hide();
+        username = $('#username').val();
+
+        if (username.length > 0) {
+            $('#userLabel').text(username);
+            socket.emit('login', username);
+            $('#page-lobby').show();
+            $('#page-game').hide();
+            $('#scoreboard').hide();
+            $('#chat').hide();
+        }
     });
 
     return {
