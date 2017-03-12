@@ -1,6 +1,17 @@
 var pieces;
 var squares;
 var username, playerColor, playerNumber;
+var boardSetup =
+    [
+        [0, 1, 0, 1, 0, 1, 0, 1],
+        [1, 0, 1, 0, 1, 0, 1, 0],
+        [0, 1, 0, 1, 0, 1, 0, 1],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 0, 2, 0, 2, 0, 2, 0],
+        [0, 2, 0, 2, 0, 2, 0, 2],
+        [2, 0, 2, 0, 2, 0, 2, 0]
+    ];
 window.onload = function () {
     /*****************************Game Component Classes*********************************/
         // initial set up of the playing board 2d array 8 x 8
@@ -8,17 +19,17 @@ window.onload = function () {
         // 1 - player1 (red)
         // 2 - player2 (black)
 
-    var boardSetup =
-            [
-                [0, 1, 0, 1, 0, 1, 0, 1],
-                [1, 0, 1, 0, 1, 0, 1, 0],
-                [0, 1, 0, 1, 0, 1, 0, 1],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [2, 0, 2, 0, 2, 0, 2, 0],
-                [0, 2, 0, 2, 0, 2, 0, 2],
-                [2, 0, 2, 0, 2, 0, 2, 0]
-            ];
+    // var boardSetup =
+    //         [
+    //             [0, 1, 0, 1, 0, 1, 0, 1],
+    //             [1, 0, 1, 0, 1, 0, 1, 0],
+    //             [0, 1, 0, 1, 0, 1, 0, 1],
+    //             [0, 0, 0, 0, 0, 0, 0, 0],
+    //             [0, 0, 0, 0, 0, 0, 0, 0],
+    //             [2, 0, 2, 0, 2, 0, 2, 0],
+    //             [0, 2, 0, 2, 0, 2, 0, 2],
+    //             [2, 0, 2, 0, 2, 0, 2, 0]
+    //         ];
 
 
     // array of pieces on the Board
@@ -612,8 +623,13 @@ window.onload = function () {
         };
 
     function rotateBoard(msg) {
-        if (msg.color === "black")
-            $("#board").css("transform", "rotate(0deg)")
+        if (msg.color === "black") {
+            $("#board").css("transform", "rotate(0deg)");
+            $('div#board .square').css("transform", "rotate(0deg)");
+            $("div#board .player2pieces .piece").css("transform", "rotate(0deg)");
+            $("div#board .player1pieces .piece").css("transform", "rotate(0deg)");
+        }
+
     }
 
     function openNav() {
@@ -695,6 +711,10 @@ window.onload = function () {
     return {
         getBoard: function () {
             return Board
+        },
+        setBoard: function (tempBoard) {
+            Board.board = tempBoard;
+            Board.initalize();
         }
     };
 };

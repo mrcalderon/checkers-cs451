@@ -145,6 +145,7 @@ div#board .square {
     position: absolute;
     background: url('http://wallpapercave.com/wp/CyT83yY.jpg') no-repeat 0 0 scroll;
     background-color: #D9B3B6;
+    transform: rotate(180deg);
 }
 
 div#board .player1pieces .piece {
@@ -175,6 +176,7 @@ div#board .player1pieces .piece {
     margin-top: 1vmin;
     margin-left: 2vmin;
     cursor: pointer;
+    transform: rotate(180deg);
 }
 
 div#board .player1pieces .piece.selected {
@@ -217,6 +219,7 @@ div#board .player2pieces .piece {
     margin-top: 1vmin;
     margin-left: 2vmin;
     cursor: pointer;
+    transform: rotate(180deg);
 }
 
 div#board .player2pieces .piece.selected {
