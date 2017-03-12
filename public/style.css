@@ -167,7 +167,8 @@ div#board {
     background-color:#0C0C0C;
     border: 1px solid #2F2311;
     overflow: hidden;
-    transform: rotate(180deg)
+    transform: rotate(180deg);
+    margin-top: 200px;
 }
 
 div#board .square {
@@ -775,6 +776,14 @@ label{
     transition: all .3s ease;
 }
 
+.h2, h2 {
+    font-size: 30px;
+    text-align: center;
+}
 
+.h1, h1 {
+    font-size: 36px;
+    text-align: center;
+}
 
 

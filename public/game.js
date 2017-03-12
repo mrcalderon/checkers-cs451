@@ -324,12 +324,12 @@ window.onload = function () {
         this.element.css("display", "none");
         if (this.player == 1)
             $('#player2').append("<div class='capturedPiece'></div>");
-        if ($('#player2 .capturedPiece').length === 1) {
+        if ($('#player2 .capturedPiece').length === 12) {
             openNav();
         }
         if (this.player == 2)
             $('#player1').append("<div class='capturedPiece'></div>");
-        if ($('#player1 .capturedPiece').length === 1) {
+        if ($('#player1 .capturedPiece').length === 12) {
             openNav();
         }
         socket.emit('remove', {
