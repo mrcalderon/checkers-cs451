@@ -1,12 +1,16 @@
 body {
-    background: #76b852; /* fallback for old browsers */
-    background: -webkit-linear-gradient(right, #76b852, #8DC26F);
-    background: -moz-linear-gradient(right, #76b852, #8DC26F);
-    background: -o-linear-gradient(right, #76b852, #8DC26F);
-    background: linear-gradient(to left, #76b852, #8DC26F);
+    /*background: #76b852; !* fallback for old browsers *!*/
+    /*background: -webkit-linear-gradient(right, #76b852, #8DC26F);*/
+    /*background: -moz-linear-gradient(right, #76b852, #8DC26F);*/
+    /*background: -o-linear-gradient(right, #76b852, #8DC26F);*/
+    /*background: linear-gradient(to left, #76b852, #8DC26F);*/
     font-family: "Roboto", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    /*-webkit-font-smoothing: antialiased;*/
+    /*-moz-osx-font-smoothing: grayscale;*/
+    background: url(https://moderndaygypsyblog.files.wordpress.com/2014/12/photodune-2487584-white-wood-background-m.jpg);
+    background-size: cover;
+    background-repeat:   no-repeat;
+    background-position: center center;
 }
 
 /*html h2, body h2 {*/
@@ -57,13 +61,15 @@ div.column {
 
 div.info, div.stats {
     width: 70%;
-    margin: 15vmin auto 0;
     box-sizing: border-box;
-    padding: 20px 30px;
-    background-color: #F1F1FF;
     color: #3A3042;
     border-radius: 3px;
     box-shadow: 1px 1px 3px #232621;
+    margin: 50px auto !important;
+    background-color: gainsboro;
+    border-radius: 25px;
+    padding: 20px;
+    border: 2px solid;
 }
 
 div.stats {
@@ -282,13 +288,13 @@ div#board .player2pieces .piece.selected {
 display: none;
 }
 
-#page-game {
-display: none;
-}
+/*#page-game {*/
+/*display: none;*/
+/*}*/
 
-#scoreboard {
-display: none;
-}
+/*#scoreboard {*/
+/*display: none;*/
+/*}*/
 
 #chat {
 display: none;
@@ -656,12 +662,6 @@ a {
     /*user-select: none;*/
 /*}*/
 
-
-
-
-
-
-
 .wrap{
     width: 300px;
     height: 350px;
@@ -713,3 +713,7 @@ label{
     width: 95%;
     transition: all .3s ease;
 }
+
+
+
+

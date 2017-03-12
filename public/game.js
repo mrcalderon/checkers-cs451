@@ -506,7 +506,7 @@ window.onload = function () {
         myGames.forEach(function (game) {
             // $('#gamesList').append($('<button>')
             //     .text('#' + game)
-            $('#userList').append($("<li>")
+            $('#gamesList').append($("<li>")
                 .append("<label>#"+game+"</label>")
                 .on('click', function () {
                     socket.emit('resumegame', game);
