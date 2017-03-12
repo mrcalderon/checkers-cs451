@@ -125,6 +125,7 @@ window.onload = function () {
                 $(".square").remove();
                 $(".piece").remove();
                 $('.capturedPiece').remove();
+                $(".message-box").remove()
             }
         };
     /***************************** End of Board Class *********************************/
@@ -390,6 +391,21 @@ window.onload = function () {
         }
     });
 
+    $('#username').keyup(function(e){
+        if(e.keyCode == 13)
+        {
+            username = $('#username').val();
+
+            if (username.length > 0) {
+                $('#userLabel').text(username);
+                socket.emit('login', username);
+
+                $('#page-login').hide();
+                $('#page-lobby').show();
+            }
+        }
+    });
+
     /***************************** Socket.io handlers *********************************/
 
     socket.on('connect', function () {
@@ -534,7 +550,15 @@ window.onload = function () {
                         window.onload();
                     }))
                     .append($('<button>') .text("DECLINE") .on('click', function () {
-                        // socket.emit('invite', user);
+                        var message = {message: username + " rejected your rematch.", rematch:false};
+                        socket.emit('chat', username, message);
+                        $(".chat-box").append($("<div class='message-box left-img'>").append($("<div class='picture'>")
+                            .append("<img src='http://emojipedia-us.s3.amazonaws.com/cache/f3/95/f395167440171c056a2d90e0ef7ffc46.png'/>")
+                            .append("<span class='time'>1 mins</span>"))
+                            .append($("<div class='message'>")
+                                .append("<span>" + username + "</span>")
+                                .append("<p>" + 'You rejected the rematch' + "</p>")));
+                        document.getElementById('messageInput').value = '';
                     }))));
         } else {
             // document.getElementById('chatContent').innerHTML += '<p><' + format + '>' + author + '<' + format + '> | ' + message + '</p>';
