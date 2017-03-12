@@ -431,7 +431,9 @@ window.onload = function () {
         $('#chat').show();
 
         // set the username in the info (stat) board accordingly
-        $('#info').append("<h1>Player " + playerNumber + ": " + username + "</h1>");
+        //$('#info').append("<h1>Player " + playerNumber + ": " + username + "</h1>");
+        $("#name").text(username);
+        $("#pnum").text(playerNumber);
     });
 
     // Handle moves you get from the server
@@ -486,7 +488,9 @@ window.onload = function () {
                     $('#chat').show();
 
                     // set the username in the info (stat) board accordingly
-                    $('#info').append("<h1>Player " + playerNumber + ": " + username + "</h1>");
+                    //$('#info').append("<h1>Player " + playerNumber + ": " + username + "</h1>");
+                    $("#name").text(username);
+                    $("#pnum").text(playerNumber);
                 }));
         });
     };

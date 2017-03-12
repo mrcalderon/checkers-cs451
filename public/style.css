@@ -694,4 +694,14 @@ img {
     padding-bottom: 20px;
 }
 
+#name{
+    font-size: 36px;
+    text-align: center;
+    font-style: normal;
+}
 
+#pnum{
+    font-size: 36px;
+    text-align: center;
+    font-style: normal;
+}
