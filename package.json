@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "./node_modules/.bin/jasmine-node spec --verbose"
+    "test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/jasmine"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +14,7 @@
     "socket.io": "^1.7.3"
   },
   "devDependencies": {
-    "jasmine-node": "^1.14.5"
+    "istanbul": "^0.4.5",
+    "jasmine": "^2.5.3"
   }
 }
