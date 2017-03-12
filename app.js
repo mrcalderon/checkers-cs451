@@ -13,42 +13,44 @@ var users = {};
 // list of active games
 var activeGames = {};
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-var server = http.listen(port, function() {
+var server = http.listen(port, function () {
     console.log('listening on *: ' + port);
 });
 
-exports.closeServer = function() {
-  server.close();
+exports.closeServer = function () {
+    server.close();
 }
 
 // calls anytime a client connects to the server
-io.on('connection', function(socket) {
+io.on('connection', function (socket) {
     console.log('new connection ' + socket);
 
     // when user enters their name & taken to lobby
-    socket.on('login', function(userId) {
+    socket.on('login', function (userId) {
         console.log(userId + ' joining lobby');
         socket.userId = userId;
 
         // check if the user is not in the users list then create a new user
         if (!users[userId]) {
             console.log('creating new user:' + userId);
-            users[userId] = {userId: socket.userId, games:{}};
-        // else user exist in the users list, retrieve user's games
+            users[userId] = {userId: socket.userId, games: {}};
+            // else user exist in the users list, retrieve user's games
         } else {
             console.log('user found!');
-            Object.keys(users[userId].games).forEach(function(gameId) {
+            Object.keys(users[userId].games).forEach(function (gameId) {
                 console.log('gameid - ' + gameId);
             });
         }
 
         // send list of users and games to everyone other than the user that just login/joined
-        socket.emit('login', {users: Object.keys(lobbyUsers),
-            games: Object.keys(users[userId].games)});
+        socket.emit('login', {
+            users: Object.keys(lobbyUsers),
+            games: Object.keys(users[userId].games)
+        });
 
         // save userId
         lobbyUsers[userId] = socket;
@@ -58,8 +60,8 @@ io.on('connection', function(socket) {
     });
 
     // when a user invites/challenges another player to a game
-    socket.on('invite', function(opponentId) {
-        console.log(socket.userId + " invites/challenges "+ opponentId + " to a game");
+    socket.on('invite', function (opponentId) {
+        console.log(socket.userId + " invites/challenges " + opponentId + " to a game");
 
         // broadcast leavelobby event to everyone else w/ that the two players are leaving the lobby to play a game
         socket.broadcast.emit('leavelobby', socket.userId);
@@ -91,10 +93,10 @@ io.on('connection', function(socket) {
         delete lobbyUsers[game.users.black];
 
         // ???
-        socket.broadcast.emit('gameadd', {gameId: game.id, gameState:game});
+        socket.broadcast.emit('gameadd', {gameId: game.id, gameState: game});
     });
 
-    socket.on('resumegame', function(gameId) {
+    socket.on('resumegame', function (gameId) {
         console.log('ready to resume game: ' + gameId);
 
         socket.gameId = gameId;
@@ -119,21 +121,21 @@ io.on('connection', function(socket) {
     });
 
     // Called when the client calls socket.emit('move')
-    socket.on('move', function(move) {
+    socket.on('move', function (move) {
         socket.broadcast.emit('move', move);
     });
 
-    socket.on('remove', function(data) {
+    socket.on('remove', function (data) {
         socket.broadcast.emit('remove', data);
     });
 
     // chat
-    socket.on('chat', function(username, message) {
+    socket.on('chat', function (username, message) {
         console.log('message received, sent by: ' + username + ', content: ' + message);
         socket.broadcast.emit('chat', username, message);
     });
 
-    socket.on('rematch', function() {
+    socket.on('rematch', function () {
         socket.broadcast.emit('rematch');
     });
 });

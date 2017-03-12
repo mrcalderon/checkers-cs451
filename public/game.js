@@ -146,127 +146,114 @@ window.onload = function () {
         else
             this.player = 2;
 
-    this.king = false;
-    // function to make this piece a king
-    this.makeKing = function()
-    {
-      this.element.css("backgroundImage", "url('images/king"+this.player+".png')");
-      this.king = true;
-    };
+        this.king = false;
+        // function to make this piece a king
+        this.makeKing = function () {
+            this.element.css("backgroundImage", "url('images/king" + this.player + ".png')");
+            this.king = true;
+        };
 
-    /* function to move the piece (either a regular move or a jump)
-       param is a square to move to
-       returns true if it is a valid move, false otherwise
-    */
-    this.move = function(square)
-    {
-      if(!Board.validToMove(square.position[0], square.position[1])) // check if move is value if true continue else break
-        return false;
+        /* function to move the piece (either a regular move or a jump)
+         param is a square to move to
+         returns true if it is a valid move, false otherwise
+         */
+        this.move = function (square) {
+            if (!Board.validToMove(square.position[0], square.position[1])) // check if move is value if true continue else break
+                return false;
 
-      // make sure a piece doesn't go backwards if it is not a king
-      if(this.player == 1 && this.king == false)
-      {
-        if(square.position[0] < this.position[0])
-            return false;
-      }
-      else if(this.player == 2 && this.king == false)
-      {
-        if(square.position[0] > this.position[0])
-            return false;
-      }
+            // make sure a piece doesn't go backwards if it is not a king
+            if (this.player == 1 && this.king == false) {
+                if (square.position[0] < this.position[0])
+                    return false;
+            }
+            else if (this.player == 2 && this.king == false) {
+                if (square.position[0] > this.position[0])
+                    return false;
+            }
 
-      // check if piece is in jumping position before the move
-      var didJump = this.canJump();
+            // check if piece is in jumping position before the move
+            var didJump = this.canJump();
 
-      // check if a square is reachable from current piece
-      var isReachable = square.isReachable(this.position);
-      if(isReachable)
-      {
-        // if the square is within jump distance
-        if(isReachable == 'jump')
-        {
-            // if the move is a jump, make a jump
-            if(this.canJump())
-            {
-              // remove piece being eaten
-              this.jump(square); // remove piece being eaten
-              // move piece to new square
-              this.moveToSquare(square);
+            // check if a square is reachable from current piece
+            var isReachable = square.isReachable(this.position);
+            if (isReachable) {
+                // if the square is within jump distance
+                if (isReachable == 'jump') {
+                    // if the move is a jump, make a jump
+                    if (this.canJump()) {
+                        // remove piece being eaten
+                        this.jump(square); // remove piece being eaten
+                        // move piece to new square
+                        this.moveToSquare(square);
+                    }
+                    else
+                        return false;
+                }
+                // if the move is regular, check if a jump is available elsewhere
+                else if (isReachable == 'regular') {
+                    // if a jump is not available, make the move
+                    if (!Board.jumpsAvailable()) {
+                        // move piece to new square
+                        this.moveToSquare(square);
+                    }
+                    // if a jump is available, don't allow a regular move
+                    else {
+                        if (Board.playerTurn === playerNumber)
+                            alert("You must jump when possible!");
+
+                        return false;
+                    }
+                }
+
+                // make a piece a king(can move all directions) if it reaches the opposite side of the board
+                if (!this.king && (this.position[0] == 0 || this.position[0] == 7 ))
+                    this.makeKing();
+
+                // switch turn if no double/triple jumps can be made from current piece
+                if (!(didJump && this.canJump())) {
+                    Board.switchPlayerTurn();
+                    // unselect the piece after moving is done
+                    this.element.removeClass('selected');
+                }
+
+                return true;
             }
             else
                 return false;
-        }
-        // if the move is regular, check if a jump is available elsewhere
-        else if(isReachable == 'regular')
-        {
-          // if a jump is not available, make the move
-          if(!Board.jumpsAvailable())
-          {
-              // move piece to new square
-              this.moveToSquare(square);
-          }
-          // if a jump is available, don't allow a regular move
-          else
-          {
-            if(Board.playerTurn === playerNumber)
-              alert("You must jump when possible!");
+        };
 
+        // function that execute the actual move
+        // takes a square to move to
+        this.moveToSquare = function (square) {
+            // remove the piece and generate in its new position(square)
+            Board.board[this.position[0]][this.position[1]] = 0; // make square empty
+            Board.board[square.position[0]][square.position[1]] = this.player; // make the new square as the current player
+            this.position = [square.position[0], square.position[1]]; // set the piece position as the new square
+            // update the piece's position in css
+            // position coordinates x,y will be converted to viewport units(vmin)
+            this.element.css('top', Board.convertUnit[this.position[0]]); // move vertically
+            this.element.css('left', Board.convertUnit[this.position[1]]); // move horizontally
+        };
+
+        // function to check if the piece can make a jump anywhere
+        this.canJump = function () {
+            // testing for all 4 directions
+            if (this.canJumpTo([this.position[0] + 2, this.position[1] + 2]) ||
+                this.canJumpTo([this.position[0] + 2, this.position[1] - 2]) ||
+                this.canJumpTo([this.position[0] - 2, this.position[1] + 2]) ||
+                this.canJumpTo([this.position[0] - 2, this.position[1] - 2])) {
+                return true;
+            }
             return false;
-          }
-        }
+        };
 
-        // make a piece a king(can move all directions) if it reaches the opposite side of the board
-        if(!this.king &&(this.position[0] == 0 || this.position[0] == 7 ))
-          this.makeKing();
-
-        // switch turn if no double/triple jumps can be made from current piece
-        if(!(didJump && this.canJump()))
-        {
-          Board.switchPlayerTurn();
-          // unselect the piece after moving is done
-          this.element.removeClass('selected');
-        }
-
-        return true;
-      }
-      else
-        return false;
-    };
-
-    // function that execute the actual move
-    // takes a square to move to
-    this.moveToSquare = function(square) {
-        // remove the piece and generate in its new position(square)
-        Board.board[this.position[0]][this.position[1]] = 0; // make square empty
-        Board.board[square.position[0]][square.position[1]] = this.player; // make the new square as the current player
-        this.position = [square.position[0], square.position[1]]; // set the piece position as the new square
-        // update the piece's position in css
-        // position coordinates x,y will be converted to viewport units(vmin)
-        this.element.css('top', Board.convertUnit[this.position[0]]); // move vertically
-        this.element.css('left', Board.convertUnit[this.position[1]]); // move horizontally
-    };
-
-    // function to check if the piece can make a jump anywhere
-    this.canJump = function() {
-      // testing for all 4 directions
-      if(this.canJumpTo([this.position[0]+2, this.position[1]+2]) ||
-         this.canJumpTo([this.position[0]+2, this.position[1]-2]) ||
-         this.canJumpTo([this.position[0]-2, this.position[1]+2]) ||
-         this.canJumpTo([this.position[0]-2, this.position[1]-2]))
-      {
-        return true;
-      }
-      return false;
-    };
-
-    /* function to check if the piece can jump another opponent and go to a specific position
-       if so, return the captured piece
-       takes as param the new position
-    */
-    this.canJumpTo = function(newPosition)
-    {
-      var dx = newPosition[1] - this.position[1];
-      var dy = newPosition[0] - this.position[0];
+        /* function to check if the piece can jump another opponent and go to a specific position
+         if so, return the captured piece
+         takes as param the new position
+         */
+        this.canJumpTo = function (newPosition) {
+            var dx = newPosition[1] - this.position[1];
+            var dy = newPosition[0] - this.position[0];
 
             // make sure object doesn't go backwards if it is not a king
             if (this.player == 1 && this.king == false) {
@@ -299,47 +286,45 @@ window.onload = function () {
             return false;
         };
 
-    /* function to jump an opponent
-       take as param a square to jump to
-    */
-    this.jump = function(square)
-    {
-      var pieceToRemove = this.canJumpTo(square.position);
-      // if a piece is captured, remove it
-      if(pieceToRemove)
-      {
-          socket.emit('remove', {
-              piece: pieceIndex
-          });
+        /* function to jump an opponent
+         take as param a square to jump to
+         */
+        this.jump = function (square) {
+            var pieceToRemove = this.canJumpTo(square.position);
+            // if a piece is captured, remove it
+            if (pieceToRemove) {
+                socket.emit('remove', {
+                    piece: pieceIndex
+                });
 
-        pieceToRemove.remove();
+                pieceToRemove.remove();
 
-        return true;
-      }
-      return false;
-    };
+                return true;
+            }
+            return false;
+        };
 
-    // function to remove the piece from the board
-    this.remove = function () {
-        this.element.css("display", "none");
-        if (this.player == 1)
-            $('#player2').append("<div class='capturedPiece'></div>");
-        if ($('#player2 .capturedPiece').length === 12) {
-            openNav();
-        }
-        if (this.player == 2)
-            $('#player1').append("<div class='capturedPiece'></div>");
-        if ($('#player1 .capturedPiece').length === 12) {
-            openNav();
-        }
-        socket.emit('remove', {
-            piece: this.element.attr("id")
-        });
+        // function to remove the piece from the board
+        this.remove = function () {
+            this.element.css("display", "none");
+            if (this.player == 1)
+                $('#player2').append("<div class='capturedPiece'></div>");
+            if ($('#player2 .capturedPiece').length === 12) {
+                openNav();
+            }
+            if (this.player == 2)
+                $('#player1').append("<div class='capturedPiece'></div>");
+            if ($('#player1 .capturedPiece').length === 12) {
+                openNav();
+            }
+            socket.emit('remove', {
+                piece: this.element.attr("id")
+            });
 
-        Board.board[this.position[0]][this.position[1]] = 0;
-        this.position = [];
-    };
-}
+            Board.board[this.position[0]][this.position[1]] = 0;
+            this.position = [];
+        };
+    }
 
     /***************************** End of Piece Class *********************************/
 
@@ -353,28 +338,28 @@ window.onload = function () {
         this.element = element;
         this.position = position;
 
-    /* function to check if square can be reached from a piece
-       takes a piece as param
-       returns whether the move from the piece to the square is regular or jump
-    */
-    this.isReachable = function(position)
-    {
-      if(dist(this.position[0], this.position[1], position[0], position[1]) == Math.sqrt(2))
-        return 'regular';
-      else if(dist(this.position[0], this.position[1], position[0], position[1]) == 2*Math.sqrt(2))
-        //jump move
-        return 'jump';
-    };
-  }
-  /***************************** End of Square Class *********************************/
+        /* function to check if square can be reached from a piece
+         takes a piece as param
+         returns whether the move from the piece to the square is regular or jump
+         */
+        this.isReachable = function (position) {
+            if (dist(this.position[0], this.position[1], position[0], position[1]) == Math.sqrt(2))
+                return 'regular';
+            else if (dist(this.position[0], this.position[1], position[0], position[1]) == 2 * Math.sqrt(2))
+            //jump move
+                return 'jump';
+        };
+    }
 
-        //initialize the board
-        Board.initalize();
-        var socket, serverGame;
-        var game, board;
-        var lobbyUsers = []; // for lobby keep track of online users
-        var myGames = []; // for lobby keep track of user's games
-        socket = io();
+    /***************************** End of Square Class *********************************/
+
+    //initialize the board
+    Board.initalize();
+    var socket, serverGame;
+    var game, board;
+    var lobbyUsers = []; // for lobby keep track of online users
+    var myGames = []; // for lobby keep track of user's games
+    socket = io();
 
     /***************************** Menus ***********************************************/
 
@@ -391,9 +376,8 @@ window.onload = function () {
         }
     });
 
-    $('#username').keyup(function(e){
-        if(e.keyCode == 13)
-        {
+    $('#username').keyup(function (e) {
+        if (e.keyCode == 13) {
             username = $('#username').val();
 
             if (username.length > 0) {
@@ -433,35 +417,35 @@ window.onload = function () {
         addGame(msg);
     });
 
-  // when user server emit joingame w/ game object and color
-  socket.on('joingame', function(msg) {
-      console.log("joined as game id: " + msg.game.id );
-      playerColor = msg.color;
-      playerNumber = msg.number;
-      // initGame(msg.game);
+    // when user server emit joingame w/ game object and color
+    socket.on('joingame', function (msg) {
+        console.log("joined as game id: " + msg.game.id);
+        playerColor = msg.color;
+        playerNumber = msg.number;
+        // initGame(msg.game);
 
-      rotateBoard(msg);
-      $('#page-lobby').hide();
-      $('#page-game').show();
-      $('#scoreboard').show();
-      $('#chat').show();
+        rotateBoard(msg);
+        $('#page-lobby').hide();
+        $('#page-game').show();
+        $('#scoreboard').show();
+        $('#chat').show();
 
-      // set the username in the info (stat) board accordingly
-      $('#info').append("<h1>Player " + playerNumber + ": "+ username +"</h1>");
-  });
+        // set the username in the info (stat) board accordingly
+        $('#info').append("<h1>Player " + playerNumber + ": " + username + "</h1>");
+    });
 
-  // Handle moves you get from the server
-  // called when the server calls socket.broadcast('move')
-  socket.on('move', function (data) {
-      // console.log(move);
-      var square = squares[data.square];
-      var piece = pieces[data.piece];
-      piece.move(square);
-  });
+    // Handle moves you get from the server
+    // called when the server calls socket.broadcast('move')
+    socket.on('move', function (data) {
+        // console.log(move);
+        var square = squares[data.square];
+        var piece = pieces[data.piece];
+        piece.move(square);
+    });
 
     socket.on('remove', function (data) {
         var piece = pieces[data.piece];
-      	if(piece.position.length > 0)
+        if (piece.position.length > 0)
             piece.remove();
     });
 
@@ -483,7 +467,7 @@ window.onload = function () {
             // $('#userList').append($('<button>')
             //     .text(user)
             $('#userList').append($("<li>")
-                .append("<label>"+user+"</label>")
+                .append("<label>" + user + "</label>")
                 .on('click', function () {
                     socket.emit('invite', user);
                     playerColor = 'red';
@@ -494,7 +478,7 @@ window.onload = function () {
                     $('#chat').show();
 
                     // set the username in the info (stat) board accordingly
-                    $('#info').append("<h1>Player " + playerNumber + ": "+ username +"</h1>");
+                    $('#info').append("<h1>Player " + playerNumber + ": " + username + "</h1>");
                 }));
         });
     };
@@ -507,7 +491,7 @@ window.onload = function () {
             // $('#gamesList').append($('<button>')
             //     .text('#' + game)
             $('#gamesList').append($("<li>")
-                .append("<label>#"+game+"</label>")
+                .append("<label>#" + game + "</label>")
                 .on('click', function () {
                     socket.emit('resumegame', game);
                 }));
@@ -525,8 +509,8 @@ window.onload = function () {
         updateGamesList();
     };
 
-    var removeUser = function(userId) {
-        for (var i=0; i<lobbyUsers.length; i++) {
+    var removeUser = function (userId) {
+        for (var i = 0; i < lobbyUsers.length; i++) {
             if (lobbyUsers[i] === userId) {
                 lobbyUsers.splice(i, 1);
             }
@@ -544,13 +528,13 @@ window.onload = function () {
                 .append($("<diusersOnlinev class='message'>")
                     .append("<span>" + username + "</span>")
                     .append("<p>" + message.message + "</p>")
-                    .append($('<button>') .text("ACCEPT") .on('click', function () {
+                    .append($('<button>').text("ACCEPT").on('click', function () {
                         socket.emit('rematch');
                         Board.clearBoard();
                         window.onload();
                     }))
-                    .append($('<button>') .text("DECLINE") .on('click', function () {
-                        var message = {message: username + " rejected your rematch.", rematch:false};
+                    .append($('<button>').text("DECLINE").on('click', function () {
+                        var message = {message: username + " rejected your rematch.", rematch: false};
                         socket.emit('chat', username, message);
                         $(".chat-box").append($("<div class='message-box left-img'>").append($("<div class='picture'>")
                             .append("<img src='http://emojipedia-us.s3.amazonaws.com/cache/f3/95/f395167440171c056a2d90e0ef7ffc46.png'/>")
@@ -572,7 +556,7 @@ window.onload = function () {
     });
 
     $('#sendMessage').on("click", function () {
-        var message = {message: document.getElementById('messageInput').value, rematch:false};
+        var message = {message: document.getElementById('messageInput').value, rematch: false};
         socket.emit('chat', username, message);
         $(".chat-box").append($("<div class='message-box left-img'>").append($("<div class='picture'>")
             .append("<img src='http://emojipedia-us.s3.amazonaws.com/cache/f3/95/f395167440171c056a2d90e0ef7ffc46.png'/>")
@@ -583,10 +567,9 @@ window.onload = function () {
         document.getElementById('messageInput').value = '';
     });
 
-    $('#messageInput').keyup(function(e){
-        if(e.keyCode == 13)
-        {
-            var message = {message: document.getElementById('messageInput').value, rematch:false};
+    $('#messageInput').keyup(function (e) {
+        if (e.keyCode == 13) {
+            var message = {message: document.getElementById('messageInput').value, rematch: false};
             socket.emit('chat', username, message);
             $(".chat-box").append($("<div class='message-box left-img'>").append($("<div class='picture'>")
                 .append("<img src='http://emojipedia-us.s3.amazonaws.com/cache/f3/95/f395167440171c056a2d90e0ef7ffc46.png'/>")
@@ -628,8 +611,7 @@ window.onload = function () {
         // check whether a piece of the current player is clicked on
         var isPlayersTurn = ($(this).parent().attr("class").split(' ')[0] == "player" + Board.playerTurn + "pieces");
         // highlight piece if it is the current player's turn to move and if the player only tries to move his/her piece
-    	if(isPlayersTurn && Board.playerTurn === playerNumber)
-        {
+        if (isPlayersTurn && Board.playerTurn === playerNumber) {
             if ($(this).hasClass('selected'))
                 selected = true;
             $('.piece').each(function (index) {
@@ -647,32 +629,30 @@ window.onload = function () {
         }
     });
 
-  // function to handle click on a square(move piece)
-  $('.square').on("click", function()
-  {
-    // only consider a move if a piece is clicked on beforehand
-    if($('.selected').length != 0)
-    {
-      // find the square being clicked
-      var squareID = $(this).attr("id").replace(/square/, ''); // get id
-      var square = squares[squareID]; // get square from squares list
-      // find the piece being selected
-      var pieceID = $('.selected').attr("id");
-      var piece = pieces[pieceID];
+    // function to handle click on a square(move piece)
+    $('.square').on("click", function () {
+        // only consider a move if a piece is clicked on beforehand
+        if ($('.selected').length != 0) {
+            // find the square being clicked
+            var squareID = $(this).attr("id").replace(/square/, ''); // get id
+            var square = squares[squareID]; // get square from squares list
+            // find the piece being selected
+            var pieceID = $('.selected').attr("id");
+            var piece = pieces[pieceID];
 
-      // emit the move to the server
-      socket.emit('move', {
-          square: squareID,
-          piece: pieceID
-      });
+            // emit the move to the server
+            socket.emit('move', {
+                square: squareID,
+                piece: pieceID
+            });
 
-      // move the piece to designated square
-      piece.move(square);
-    }
-  });
+            // move the piece to designated square
+            piece.move(square);
+        }
+    });
 
     $('#rematch').on("click", function () {
-        var message = {message: "Wants to rematch?", rematch:true};
+        var message = {message: "Wants to rematch?", rematch: true};
         socket.emit('chat', username, message);
     });
 
@@ -690,6 +670,8 @@ window.onload = function () {
     });
 
     return {
-        getBoard: function(){return Board}
+        getBoard: function () {
+            return Board
+        }
     };
 };
