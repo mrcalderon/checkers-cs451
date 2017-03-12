@@ -8,9 +8,9 @@ body {
     /*-webkit-font-smoothing: antialiased;*/
     /*-moz-osx-font-smoothing: grayscale;*/
     background: url(https://moderndaygypsyblog.files.wordpress.com/2014/12/photodune-2487584-white-wood-background-m.jpg);
-    background-size: cover;
-    background-repeat:   no-repeat;
-    background-position: center center;
+    /*background-size: cover;*/
+    /*background-repeat:   no-repeat;*/
+    /*background-position: center center;*/
 }
 
 /*html h2, body h2 {*/
@@ -193,7 +193,7 @@ div#board .player1pieces .piece {
     box-shadow: inset 0 0 1px 1px rgba(0,0,0, 0.1), 0 0 5px 1px rgba(90,90,90, 0.1), inset 0 35px 1px rgba(255,255,255, 0.2);
     -moz-box-shadow: inset 0 0 1px 1px rgba(0,0,0, 0.1), 0 0 5px 1px rgba(90,90,90, 0.1), inset 0 35px 1px rgba(255,255,255, 0.2);
 
-    border: 7px #1a1122; /*border color*/
+    border: 7px dotted #1a1122; /*border color*/
     -webkit-border-radius: 10px;
     -webkit-box-shadow:
             0px 3px rgba(128,128,128,1), /* gradient effects */
@@ -239,7 +239,7 @@ div#board .player2pieces .piece {
     -moz-border-radius: 150px;
     box-shadow: inset 0 0 1px 1px rgba(0,0,0, 0.1), 0 0 5px 1px rgba(90,90,90, 0.1), inset 0 35px 1px rgba(255,255,255, 0.2);
     -moz-box-shadow: inset 0 0 1px 1px rgba(0,0,0, 0.1), 0 0 5px 1px rgba(90,90,90, 0.1), inset 0 35px 1px rgba(255,255,255, 0.2);
-    border: 7px #91969b; /*border color*/
+    border: 7px dotted #91969b; /*border color*/
     -webkit-border-radius: 10px;
     -webkit-box-shadow:
             0px 3px rgba(128,128,128,1), /* gradient effects */
@@ -349,13 +349,13 @@ div#board .player2pieces .piece.selected {
 display: none;
 }
 
-/*#page-game {*/
-/*display: none;*/
-/*}*/
+#page-game {
+display: none;
+}
 
-/*#scoreboard {*/
-/*display: none;*/
-/*}*/
+#scoreboard {
+display: none;
+}
 
 #chat {
 display: none;
