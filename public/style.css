@@ -156,47 +156,98 @@ div#board {
     left: calc(50% - 40vmin);
     width: 80vmin;
     height: 80vmin;
-    border-radius: 5px;
-    box-shadow: 1px 1px 3px #232621;
-    background-color: #ffffff;
+    border-radius: 10px;
+    background: url('http://i.stack.imgur.com/jGlzr.png') no-repeat 0 0 scroll;
+    background-color:#0C0C0C;
+    border: 1px solid #2F2311;
     overflow: hidden;
-    transform: rotate(180deg);
+    transform: rotate(180deg)
 }
 
 div#board .square {
-    width: 10vmin;
-    height: 10vmin;
-    position: absolute;
-    background-color: #232621;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow:
+            0px 3px rgba(128,128,128,1), /* gradient effects */
+            0px 4px rgba(118,118,118,1),
+            0px 5px rgba(108,108,108,1),
+            0px 6px rgba(98,98,98,1),
+            0px 7px rgba(88,88,88,1),
+            0px 8px rgba(78,78,78,1),
+            0px 14px 6px -1px rgba(128,128,128,1); /* shadow */
+    -webkit-transition: -webkit-box-shadow .1s ease-in-out;
+      width: 10vmin;
+      height: 10vmin;
+      position: absolute;
+      background: url('http://wallpapercave.com/wp/CyT83yY.jpg') no-repeat 0 0 scroll;
+      background-color: #D9B3B6;
 }
 
 div#board .player1pieces .piece {
+    -moz-border-radius: 150px;
+    box-shadow: inset 0 0 1px 1px rgba(0,0,0, 0.1), 0 0 5px 1px rgba(90,90,90, 0.1), inset 0 35px 1px rgba(255,255,255, 0.2);
+    -moz-box-shadow: inset 0 0 1px 1px rgba(0,0,0, 0.1), 0 0 5px 1px rgba(90,90,90, 0.1), inset 0 35px 1px rgba(255,255,255, 0.2);
+
+    border: 7px #1a1122; /*border color*/
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow:
+            0px 3px rgba(128,128,128,1), /* gradient effects */
+            0px 4px rgba(118,118,118,1),
+            0px 5px rgba(108,108,108,1),
+            0px 6px rgba(98,98,98,1),
+            0px 7px rgba(88,88,88,1),
+            0px 8px rgba(78,78,78,1),
+            0px 14px 6px -1px rgba(128,128,128,1); /* shadow */
+    -webkit-transition: -webkit-box-shadow .1s ease-in-out;
     position: absolute;
-    width: 8vmin;
-    height: 8vmin;
-    background-color: #e4a6ae;
+    width: 6vmin;
+    height: 6vmin;
+    background-color: #e52027; /*piece color*/
     background-size: 65%;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: right;
     border-radius: 6vmin;
     display: inline-block;
     box-sizing: border-box;
     transition: all 0.2s linear;
     margin-top: 1vmin;
-    margin-left: 1vmin;
+    margin-left: 2vmin;
     cursor: pointer;
-    border: 1vmin solid #B93848;
 }
 
 div#board .player1pieces .piece.selected {
     box-shadow: 0 0 10px 5px #16A8C7;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow:
+            0px 3px rgba(128,128,128,1), /* gradient effects */
+            0px 4px rgba(118,118,118,1),
+            0px 5px rgba(108,108,108,1),
+            0px 6px rgba(98,98,98,1),
+            0px 7px rgba(88,88,88,1),
+            0px 8px rgba(78,78,78,1),
+            0px 14px 6px -1px rgba(128,128,128,1); /* shadow */
+
+    -webkit-transition: -webkit-box-shadow .1s ease-in-out;
 }
 
 div#board .player2pieces .piece {
+    -moz-border-radius: 150px;
+    box-shadow: inset 0 0 1px 1px rgba(0,0,0, 0.1), 0 0 5px 1px rgba(90,90,90, 0.1), inset 0 35px 1px rgba(255,255,255, 0.2);
+    -moz-box-shadow: inset 0 0 1px 1px rgba(0,0,0, 0.1), 0 0 5px 1px rgba(90,90,90, 0.1), inset 0 35px 1px rgba(255,255,255, 0.2);
+    border: 7px #91969b; /*border color*/
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow:
+            0px 3px rgba(128,128,128,1), /* gradient effects */
+            0px 4px rgba(118,118,118,1),
+            0px 5px rgba(108,108,108,1),
+            0px 6px rgba(98,98,98,1),
+            0px 7px rgba(88,88,88,1),
+            0px 8px rgba(78,78,78,1),
+            0px 14px 6px -1px rgba(128,128,128,1); /* shadow */
+    -webkit-transition: -webkit-box-shadow .1s ease-in-out;
     position: absolute;
-    width: 8vmin;
-    height: 8vmin;
-    background-color: #232621;
+    width: 6vmin;
+    height: 6vmin;
+    background-color: #1a1122; /*piece color*/
     background-size: 65%;
     background-repeat: no-repeat;
     background-position: center;
@@ -205,13 +256,23 @@ div#board .player2pieces .piece {
     box-sizing: border-box;
     transition: all 0.2s linear;
     margin-top: 1vmin;
-    margin-left: 1vmin;
+    margin-left: 2vmin;
     cursor: pointer;
-    border: 1vmin solid #a5a4a4;
 }
 
 div#board .player2pieces .piece.selected {
-    box-shadow: 0 0 10px 5px #16A8C7;
+    -webkit-border-radius: 10px;
+
+    -webkit-box-shadow:
+            0px 3px rgba(128,128,128,1), /* gradient effects */
+            0px 4px rgba(118,118,118,1),
+            0px 5px rgba(108,108,108,1),
+            0px 6px rgba(98,98,98,1),
+            0px 7px rgba(88,88,88,1),
+            0px 8px rgba(78,78,78,1),
+            0px 14px 6px -1px rgba(128,128,128,1); /* shadow */
+
+    -webkit-transition: -webkit-box-shadow .1s ease-in-out;
 }
 
 /*# sourceMappingURL=style.css.map */
