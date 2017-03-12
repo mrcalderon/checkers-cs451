@@ -23,7 +23,7 @@ var server = http.listen(port, function () {
 
 exports.closeServer = function () {
     server.close();
-}
+};
 
 // calls anytime a client connects to the server
 io.on('connection', function (socket) {
@@ -87,6 +87,7 @@ io.on('connection', function (socket) {
         // lobbyUsers[game.users.white].emit('joingame', {game: game, color: 'white'});
         // lobbyUsers[game.users.black].emit('joingame', {game: game, color: 'black'});
         socket.broadcast.emit('joingame', {game: game, color: 'black', number: 2});
+        socket.emit('gameId', game.id);
 
         // Remove player from the lobbyUsers dic
         delete lobbyUsers[game.users.red];
@@ -97,8 +98,6 @@ io.on('connection', function (socket) {
     });
 
     socket.on('resumegame', function (gameId) {
-        console.log('ready to resume game: ' + gameId);
-
         socket.gameId = gameId;
         var game = activeGames[gameId];
 
@@ -137,5 +136,22 @@ io.on('connection', function (socket) {
 
     socket.on('rematch', function () {
         socket.broadcast.emit('rematch');
+    });
+
+    socket.on('disconnect', function(msg) {
+
+        console.log("msg", msg);
+
+        if (socket && socket.userId && socket.gameId) {
+            console.log(socket.userId + ' disconnected');
+            console.log(socket.gameId + ' disconnected');
+        }
+
+        delete lobbyUsers[socket.userId];
+
+        socket.broadcast.emit('logout', {
+            userId: socket.userId,
+            gameId: socket.gameId
+        });
     });
 });
