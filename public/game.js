@@ -409,7 +409,6 @@ window.onload = function () {
 
     // when current player just login/joined get current list of online users and any active games from before + update UI
     socket.on('login', function (msg) {
-        console.log("from login:" + msg);
         lobbyUsers = msg.users; // get list of users online
         updateUserList(); // update online users list
 

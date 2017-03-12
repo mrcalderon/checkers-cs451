@@ -107,14 +107,14 @@ io.on('connection', function (socket) {
         console.log('resuming game: ' + game.id);
         if (lobbyUsers[game.users.red]) {
             // lobbyUsers[game.users.white].emit('joingame', {game: game, color: 'white'});
-            socket.emit('joingame', {game: game, color: 'red'});
+            socket.emit('joingame', {game: game, color: 'red', number: 1});
             delete lobbyUsers[game.users.red];
         }
 
         if (lobbyUsers[game.users.black]) {
             // lobbyUsers[game.users.black] &&
             // lobbyUsers[game.users.black].emit('joingame', {game: game, color: 'black'});
-            socket.emit('joingame', {game: game, color: 'black'});
+            socket.emit('joingame', {game: game, color: 'black', number: 2});
             delete lobbyUsers[game.users.black];
         }
     });
