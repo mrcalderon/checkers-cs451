@@ -4,7 +4,7 @@ app.use(express.static('public'));
 var exports = module.exports = {};
 var http = require('http').Server(app);
 var io = require('socket.io')(http); // setup socket server
-var port = process.env.PORT || 3099;
+var port = process.env.PORT || 3000;
 
 // list of users online in the lobby ready to play
 var lobbyUsers = {};
