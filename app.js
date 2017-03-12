@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 app.use(express.static('public'));
+var exports = module.exports = {};
 var http = require('http').Server(app);
 var io = require('socket.io')(http); // setup socket server
 var port = process.env.PORT || 3000;
@@ -16,9 +17,13 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-http.listen(port, function() {
+var server = http.listen(port, function() {
     console.log('listening on *: ' + port);
 });
+
+exports.closeServer = function() {
+  server.close();
+}
 
 // calls anytime a client connects to the server
 io.on('connection', function(socket) {
@@ -79,7 +84,7 @@ io.on('connection', function(socket) {
         // send joingame event to the opponent that the user invites/challenges w/ game object and their respective color
         // lobbyUsers[game.users.white].emit('joingame', {game: game, color: 'white'});
         // lobbyUsers[game.users.black].emit('joingame', {game: game, color: 'black'});
-        socket.broadcast.emit('joingame', {game: game, color: 'black'});
+        socket.broadcast.emit('joingame', {game: game, color: 'black', number: 2});
 
         // Remove player from the lobbyUsers dic
         delete lobbyUsers[game.users.red];
