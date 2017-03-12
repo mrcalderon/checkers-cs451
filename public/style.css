@@ -111,7 +111,7 @@ div.stats #player1 .capturedPiece {
     width: 2.4vmin;
     height: 2.4vmin;
     background-color: #232621;
-    background-size: 65%;
+    background-size: 85%;
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 6vmin;
@@ -141,7 +141,7 @@ div.stats #player2 .capturedPiece {
     width: 2.4vmin;
     height: 2.4vmin;
     background-color: #B93848;
-    background-size: 65%;
+    background-size: 85%;
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 6vmin;
@@ -213,7 +213,6 @@ div#board .player1pieces .piece {
     -moz-border-radius: 150px;
     box-shadow: inset 0 0 1px 1px rgba(0, 0, 0, 0.1), 0 0 5px 1px rgba(90, 90, 90, 0.1), inset 0 35px 1px rgba(255, 255, 255, 0.2);
     -moz-box-shadow: inset 0 0 1px 1px rgba(0, 0, 0, 0.1), 0 0 5px 1px rgba(90, 90, 90, 0.1), inset 0 35px 1px rgba(255, 255, 255, 0.2);
-
     border: 7px dotted #1a1122; /*border color*/
     -webkit-border-radius: 10px;
     -webkit-box-shadow: 0px 3px rgba(128, 128, 128, 1), /* gradient effects */ 0px 4px rgba(118, 118, 118, 1),
@@ -227,9 +226,9 @@ div#board .player1pieces .piece {
     width: 6vmin;
     height: 6vmin;
     background-color: #e52027; /*piece color*/
-    background-size: 65%;
+    background-size: 85%;
     background-repeat: no-repeat;
-    background-position: right;
+    background-position: center;
     border-radius: 6vmin;
     display: inline-block;
     box-sizing: border-box;
@@ -270,7 +269,7 @@ div#board .player2pieces .piece {
     width: 6vmin;
     height: 6vmin;
     background-color: #1a1122; /*piece color*/
-    background-size: 65%;
+    background-size: 85%;
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 6vmin;
