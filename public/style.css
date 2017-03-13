@@ -1,8 +1,53 @@
+.wrapper1 {
+    width: 200px;
+    height: 100px;
+    position: absolute;
+    top:-110px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.w1 {
+    perspective: 1000px;
+}
+
+.w2 {
+    perspective: 550px;
+}
+
+
+.cube {
+    font-size: 4em;
+    width: 2em;
+    margin: 1.5em auto;
+    transform-style: preserve-3d;
+    transform: rotateX(-40deg) rotateY(0deg);
+}
+
+.side {
+    position: absolute;
+    width: 2em;
+    height: 2em;
+
+    border: 1px solid rgba(0,0,0,.5);
+
+    color: white;
+    text-align: center;
+    line-height: 2em;
+}
+
+.front  { transform:                  translateZ(1em); }
+.top    { transform: rotateX( 90deg)  translateZ(1em); }
+.right  { transform: rotateY( 90deg)  translateZ(1em); }
+.left   { transform: rotateY(-90deg)  translateZ(1em); }
+.bottom { transform: rotateX(-90deg)  translateZ(1em); }
+.back   { transform: rotateY(-180deg) translateZ(1em); }
 body {
     font-family: "Roboto", sans-serif;
     background: url(https://moderndaygypsyblog.files.wordpress.com/2014/12/photodune-2487584-white-wood-background-m.jpg);
 }
-
 div.column {
     float: left;
     overflow: auto;
@@ -10,7 +55,11 @@ div.column {
     min-height: 100%;
     width: 50%;
 }
-
+h3{
+    font-weight: bold;
+    color: #fff;
+    font-size: 100px;
+}
 @media screen and (max-width: 1000px) {
     div.column {
         width: 100% !important;
@@ -30,6 +79,7 @@ div.info, div.stats {
     border-radius: 25px;
     padding: 20px;
     border: 2px solid;
+    background: url('http://i.stack.imgur.com/jGlzr.png') no-repeat 0 0 scroll;
 }
 
 div.stats {
@@ -37,19 +87,24 @@ div.stats {
 }
 
 div.stats .wrapper {
-    display: flex;
+    /*display: flex;*/
+    background: url('http://i.stack.imgur.com/jGlzr.png') no-repeat 0 0 scroll;
 }
 
 div.stats #player1 {
     text-align: center;
-    display: inline-block;
-    width: 50%;
+    /*display: inline-block;*/
+    /*width: 50%;*/
     float: left;
-    background-color: #B93848;
-    box-sizing: border-box;
-    padding: 0 15px 20px;
-    border-top-left-radius: 3px;
-    color: #232621;
+    color: white;
+    display: block;
+    background: black;
+    border-radius: 100%;
+    border: 15px dotted #1a1122;
+    height: 200px;
+    width: 200px;
+    margin: 0;
+    background: radial-gradient(circle at 100px 100px, #CB3434, #FB0D0D);
 }
 
 div.stats #player1 .capturedPiece {
@@ -68,14 +123,18 @@ div.stats #player1 .capturedPiece {
 
 div.stats #player2 {
     text-align: center;
-    display: inline-block;
-    width: 50%;
+    /*display: inline-block;*/
+    /*width: 50%;*/
     float: left;
-    background-color: #232621;
-    box-sizing: border-box;
-    padding: 0 15px 20px;
-    border-top-right-radius: 3px;
-    color: #B93848;
+    color: white;
+    display: block;
+    background: black;
+    border-radius: 100%;
+    border: 15px dotted #91969b;
+    height: 200px;
+    width: 200px;
+    margin: 0;
+    background: radial-gradient(circle at 100px 100px, #100202, #100202);
 }
 
 div.stats #player2 .capturedPiece {
@@ -94,9 +153,11 @@ div.stats #player2 .capturedPiece {
 
 div.stats div.turn {
     height: 10px;
-    width: 100%;
-    background: linear-gradient(to right, #BEEE62 50%, transparent 50%);
+    width: 400px;
+    background: linear-gradient(to right, #0AFB2F 50%, transparent 50%);
     border-radius: 0 0 3px 3px;
+    border-bottom-left-radius: 200px;
+    border-bottom-right-radius: 200px;
 }
 
 div.stats button#resign {
@@ -172,7 +233,7 @@ div#board .player1pieces .piece {
     display: inline-block;
     box-sizing: border-box;
     transition: all 0.2s linear;
-    margin-top: 1vmin;
+    margin-top: 3vmin;
     margin-left: 2vmin;
     cursor: pointer;
     transform: rotate(180deg);
@@ -215,7 +276,7 @@ div#board .player2pieces .piece {
     display: inline-block;
     box-sizing: border-box;
     transition: all 0.2s linear;
-    margin-top: 1vmin;
+    margin-top: 3vmin;
     margin-left: 2vmin;
     cursor: pointer;
     transform: rotate(180deg);

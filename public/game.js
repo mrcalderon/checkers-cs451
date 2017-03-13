@@ -627,6 +627,8 @@ window.onload = function () {
             $('div#board .square').css("transform", "rotate(0deg)");
             $("div#board .player2pieces .piece").css("transform", "rotate(0deg)");
             $("div#board .player1pieces .piece").css("transform", "rotate(0deg)");
+            $("div#board .player1pieces .piece").css("margin-top", "1vmin");
+            $("div#board .player2pieces .piece").css("margin-top", "0.5vmin");
         }
 
     }
