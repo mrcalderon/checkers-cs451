@@ -69,7 +69,7 @@ h3{
 }
 
 div.info, div.stats {
-    width: 70%;
+    width: 50vmin;
     box-sizing: border-box;
     color: #3A3042;
     border-radius: 3px;
@@ -105,6 +105,7 @@ div.stats #player1 {
     width: 200px;
     margin: 0;
     background: radial-gradient(circle at 100px 100px, #CB3434, #FB0D0D);
+    margin-left: 15px;
 }
 
 div.stats #player1 .capturedPiece {
@@ -189,7 +190,7 @@ div#board {
     border: 1px solid #2F2311;
     overflow: hidden;
     transform: rotate(180deg);
-    margin-top: 200px;
+    margin-top: -200px;
 }
 
 div#board .square {
