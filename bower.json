@@ -1,0 +1,21 @@
+{
+  "name": "mycheckers",
+  "description": "",
+  "main": "app.js",
+  "authors": [
+    "Ryan Efendy <ryanefendy95@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/mrcalderon/checkers-cs451",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.1"
+  }
+}
