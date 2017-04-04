@@ -1,6 +1,6 @@
 # [FastCheckers](http://twinkle.cs.drexel.edu:3000/) &middot; [![Build Status](https://travis-ci.com/mrcalderon/checkers-cs451.svg?token=SvS3zxyTLVDAqzasCV4t&branch=master)](https://travis-ci.com/mrcalderon/checkers-cs451)
 
-## Instructions:
+## Instructions
 - Run `npm install` inside of the project folder using a CLI
 - Run `node app.js` to run the application locally 
 
